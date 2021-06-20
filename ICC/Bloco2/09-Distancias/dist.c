@@ -59,10 +59,10 @@ int main() {
 }
 
 double diagonal(double x_i, double x_f, double y_i, double y_f) {
-    double distancia;
-    distancia = sqrt(pow(x_f - x_i, 2) + pow(y_f - y_i, 2));
+  double distancia;
+  distancia = sqrt(pow(x_f - x_i, 2) + pow(y_f - y_i, 2));
 
-    return distancia;
+  return distancia;
 }
 
 double contorno(double x_i, double x_f, double y_i, double y_f) {

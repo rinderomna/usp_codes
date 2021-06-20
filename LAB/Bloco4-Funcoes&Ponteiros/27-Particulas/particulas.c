@@ -6,56 +6,56 @@ enum {
   COPIA
 };
 
-void Cria_Particula(char Particula, int x, int y,char Matriz[32][64]);
-void Troca(char *a, char *b);
-void Zera_Matriz(char Matriz[32][64]);
-void Copia_Matriz(char Matriz_Destino[32][64], char Matriz_Original[32][64]);
-void Imprime_Matriz(char Matriz[32][64]);
-void Atualiza_Fisica(char Matriz_Frame[32][64]);
+void cria_particula(char Particula, int x, int y,char Matriz[32][64]);
+void troca(char *a, char *b);
+void zera_matriz(char Matriz[32][64]);
+void copia_matriz(char Matriz_Destino[32][64], char Matriz_Original[32][64]);
+void imprime_matriz(char Matriz[32][64]);
+void atualiza_fisica(char Matriz_Frame[32][64]);
 
 int main() {
   char Matriz_Frame[32][64];
   int n_frames, frame, x, y;
-  char nova_particula;
+  char Nova_Particula;
 
-  Zera_Matriz(Matriz_Frame);
+  zera_matriz(Matriz_Frame);
 
   scanf("%d", &n_frames);
 
   int contador = 0;
   while (contador < n_frames) {
-    int n_lido = scanf(" %d: %d %d %c", &frame, &x, &y, &nova_particula);
+    int n_lido = scanf(" %d: %d %d %c", &frame, &x, &y, &Nova_Particula);
     
     if (n_lido == EOF)
       frame = n_frames;
     
     while (contador < frame) {
       printf("frame: %d\n", contador + 1);
-      Imprime_Matriz(Matriz_Frame);
-      Atualiza_Fisica(Matriz_Frame);
+      imprime_matriz(Matriz_Frame);
+      atualiza_fisica(Matriz_Frame);
       contador++;
     }
     
     if (n_lido != EOF) {
-      Cria_Particula(nova_particula, x, y, Matriz_Frame);
+      cria_particula(Nova_Particula, x, y, Matriz_Frame);
     }
   }
 
   return 0;
 }
 
-void Cria_Particula(char Particula, int x, int y, char Matriz[32][64]) {
+void cria_particula(char Particula, int x, int y, char Matriz[32][64]) {
   Matriz[y][x] = Particula;
 }
 
-void Troca(char *a, char *b) {
+void troca(char *a, char *b) {
   char aux;
   aux = *a;
   *a = *b;
   *b = aux;
 }
 
-void Zera_Matriz(char Matriz[32][64]) {
+void zera_matriz(char Matriz[32][64]) {
   for (int i = 0; i < 32; i++) {
     for (int j = 0; j < 64; j++) {
       Matriz[i][j] = ' ';
@@ -63,7 +63,7 @@ void Zera_Matriz(char Matriz[32][64]) {
   }
 }
 
-void Copia_Matriz(char Matriz_Destino[32][64], char Matriz_Original[32][64]) {
+void copia_matriz(char Matriz_Destino[32][64], char Matriz_Original[32][64]) {
   for (int i = 0; i < 32; i++) {
     for (int j = 0; j < 64; j++) {
       Matriz_Destino[i][j] = Matriz_Original[i][j]; 
@@ -71,7 +71,7 @@ void Copia_Matriz(char Matriz_Destino[32][64], char Matriz_Original[32][64]) {
   }
 }
 
-void Imprime_Matriz(char Matriz[32][64]) {
+void imprime_matriz(char Matriz[32][64]) {
   for (int i = 0; i < 32; i++) {
     for (int j = 0; j < 64; j++) {
       printf("%c", Matriz[i][j]);
@@ -80,41 +80,41 @@ void Imprime_Matriz(char Matriz[32][64]) {
   }
 }
 
-void Atualiza_Fisica(char Matriz_Frame[32][64]) {
+void atualiza_fisica(char Matriz_Frame[32][64]) {
   char Matriz_Copia[32][64];
 
-  Copia_Matriz(Matriz_Copia, Matriz_Frame);
+  copia_matriz(Matriz_Copia, Matriz_Frame);
 
   for (int i = 0; i < 32; i++) {
     for(int j = 0; j < 64; j++) {
-      char *comparador[5][2];
+      char *Comparador[5][2];
       char Borda = '@';
 
-      comparador[0][ORIGINAL] = (i == 31) ? &Borda : &Matriz_Frame[i + 1][j];
-      comparador[1][ORIGINAL] = (i == 31 || j == 0) ? &Borda : &Matriz_Frame[i + 1][j - 1];
-      comparador[2][ORIGINAL] = (i == 31 || j == 63) ? &Borda : &Matriz_Frame[i + 1][j + 1];
-      comparador[3][ORIGINAL] = (j == 0) ? &Borda : &Matriz_Frame[i][j - 1];
-      comparador[4][ORIGINAL] = (j == 63) ? &Borda : &Matriz_Frame[i][j + 1];
+      Comparador[0][ORIGINAL] = (i == 31) ? &Borda : &Matriz_Frame[i + 1][j];
+      Comparador[1][ORIGINAL] = (i == 31 || j == 0) ? &Borda : &Matriz_Frame[i + 1][j - 1];
+      Comparador[2][ORIGINAL] = (i == 31 || j == 63) ? &Borda : &Matriz_Frame[i + 1][j + 1];
+      Comparador[3][ORIGINAL] = (j == 0) ? &Borda : &Matriz_Frame[i][j - 1];
+      Comparador[4][ORIGINAL] = (j == 63) ? &Borda : &Matriz_Frame[i][j + 1];
 
-      comparador[0][COPIA] = (i == 31) ? &Borda : &Matriz_Copia[i + 1][j];
-      comparador[1][COPIA] = (i == 31 || j == 0) ? &Borda : &Matriz_Copia[i + 1][j - 1];
-      comparador[2][COPIA] = (i == 31 || j == 63) ? &Borda : &Matriz_Copia[i + 1][j + 1];
-      comparador[3][COPIA] = (j == 0) ? &Borda : &Matriz_Copia[i][j - 1];
-      comparador[4][COPIA] = (j == 63) ? &Borda : &Matriz_Copia[i][j + 1];
+      Comparador[0][COPIA] = (i == 31) ? &Borda : &Matriz_Copia[i + 1][j];
+      Comparador[1][COPIA] = (i == 31 || j == 0) ? &Borda : &Matriz_Copia[i + 1][j - 1];
+      Comparador[2][COPIA] = (i == 31 || j == 63) ? &Borda : &Matriz_Copia[i + 1][j + 1];
+      Comparador[3][COPIA] = (j == 0) ? &Borda : &Matriz_Copia[i][j - 1];
+      Comparador[4][COPIA] = (j == 63) ? &Borda : &Matriz_Copia[i][j + 1];
 
       switch(Matriz_Frame[i][j]) {
         case '#':
           for (int k = 0; k < 3; k++) {
-            if (*comparador[k][ORIGINAL] == '~' || *comparador[k][ORIGINAL] == ' ') {
-              Troca(comparador[k][COPIA], &Matriz_Copia[i][j]);
+            if (*Comparador[k][ORIGINAL] == '~' || *Comparador[k][ORIGINAL] == ' ') {
+              troca(Comparador[k][COPIA], &Matriz_Copia[i][j]);
               break;
             }
           }
           break;
         case '~':
           for (int k = 0; k < 5; k++) {
-            if (*comparador[k][ORIGINAL] == ' ') {
-              Troca(comparador[k][COPIA], &Matriz_Copia[i][j]);
+            if (*Comparador[k][ORIGINAL] == ' ') {
+              troca(Comparador[k][COPIA], &Matriz_Copia[i][j]);
               break;
             }
           }
@@ -123,5 +123,5 @@ void Atualiza_Fisica(char Matriz_Frame[32][64]) {
     }
   }
 
-  Copia_Matriz(Matriz_Frame, Matriz_Copia);
+  copia_matriz(Matriz_Frame, Matriz_Copia);
 }

@@ -1,11 +1,8 @@
 #include <stdio.h>
 
 int maior(int n, int *numeros);
-
 int menor(int n, int *numeros);
-
 float media(int n, int *numeros);
-
 int moda(int n, int *numeros);
 
 int main() {
