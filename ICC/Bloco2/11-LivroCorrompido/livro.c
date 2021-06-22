@@ -27,6 +27,9 @@ int main() {
   for (int i = 0; i < v; i++)
     printf("%s\n", lines[true_lines[i]]);
 
+  for(int i = 0; i < n_lines; i++)
+    free(lines[i]);
+
   return 0;
 }
 

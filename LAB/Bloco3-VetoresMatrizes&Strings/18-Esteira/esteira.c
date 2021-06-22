@@ -1,21 +1,22 @@
 #include <stdio.h>
+#include <stdbool.h>
+
+enum {
+  KEEP_GOING,
+  OK,
+  INFINITY_LOOP,
+  ERROR
+};
 
 int main() {
   char factory[32][32];
-  // pos[0]: actual row
-  // pos[1]: actual column
+  // pos[0]: current row
+  // pos[1]: current column
   int pos[2] = {0, 0};
   char previous;
   
-  char not_junction = 1;
-
-  /*
-   * status 0: keep going
-   * status 1: Ok!
-   * status 2: Infinity Loop
-   * status 3: Error
-   */
-  int status = 0;
+  bool not_junction = true;
+  int status = KEEP_GOING;
 
   for(int i = 0; i < 32; i++) {
     for(int j = 0; j < 32; j++) {
@@ -32,7 +33,7 @@ int main() {
 
   char symb = factory[pos[0]][pos[1]];
 
-  while(status == 0) {
+  while(status == KEEP_GOING) {
     if(symb != '#')
       symb = factory[pos[0]][pos[1]];
     else
@@ -46,55 +47,55 @@ int main() {
       case '>':
         if (not_junction)
           factory[pos[0]][pos[1]] = '.';
-        not_junction = 1;
+        not_junction = true;
         pos[1]++;
         previous = '>';
         break;
       case '<':
         if (not_junction)
           factory[pos[0]][pos[1]] = '.';
-        not_junction = 1;
+        not_junction = true;
         pos[1]--;
         previous = '<';
         break;
       case '^':
         if (not_junction)
           factory[pos[0]][pos[1]] = '.';
-        not_junction = 1;
+        not_junction = true;
         pos[0]--;
         previous = '^';
         break;
       case 'v':
         if (not_junction)
           factory[pos[0]][pos[1]] = '.';
-        not_junction = 1;
+        not_junction = true;
         pos[0]++;
         previous = 'v';
         break;
       case '#':
         symb = '#';
-        not_junction = 0;
+        not_junction = false;
         break;
       case ']':
-        status = 1;
+        status = OK;
         break;
       case '.':
-        status = 2;
+        status = INFINITY_LOOP;
         break;
       default:
-        status = 3;
+        status = ERROR;
         break;
     }
   }
 
   switch (status) {
-    case 1:
+    case OK:
       printf("Ok.\n");
       break;
-    case 2:
+    case INFINITY_LOOP:
       printf("Loop infinito.\n");
       break;
-    case 3:
+    case ERROR:
       printf("Falha na esteira.\n");
       break;
   }
