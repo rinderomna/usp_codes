@@ -18,8 +18,8 @@ int main() {
   bool not_junction = true;
   int status = KEEP_GOING;
 
-  for(int i = 0; i < 32; i++) {
-    for(int j = 0; j < 32; j++) {
+  for (int i = 0; i < 32; i++) {
+    for (int j = 0; j < 32; j++) {
       factory[i][j] = getchar();
       if (factory[i][j] == '[') {
         pos[0] = i;
@@ -33,8 +33,8 @@ int main() {
 
   char symb = factory[pos[0]][pos[1]];
 
-  while(status == KEEP_GOING) {
-    if(symb != '#')
+  while (status == KEEP_GOING) {
+    if (symb != '#')
       symb = factory[pos[0]][pos[1]];
     else
       symb = previous;
@@ -100,8 +100,8 @@ int main() {
       break;
   }
 
-  for(int i = 0; i < 32; i++) {
-    for(int j = 0; j < 32; j++) {
+  for (int i = 0; i < 32; i++) {
+    for (int j = 0; j < 32; j++) {
       printf("%c ", factory[i][j]);
     }
     printf("\n");

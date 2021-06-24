@@ -7,7 +7,7 @@ int main() {
   
   scanf("%lli %lli %lli %lli", &La, &Ca, &Lb, &Cb);
 
-  if(Ca != Lb || La <= 0 || Ca <= 0 || Lb <= 0 || Cb <= 0) {
+  if (Ca != Lb || La <= 0 || Ca <= 0 || Lb <= 0 || Cb <= 0) {
     printf("Valores invalidos para a multiplicacao.\n");
     exit(0);
   }
@@ -18,30 +18,30 @@ int main() {
 
   srand(seed);
 
-  for(int i = 0; i < La; i++) {
-    for(int j = 0; j < Ca; j++) {
+  for (int i = 0; i < La; i++) {
+    for (int j = 0; j < Ca; j++) {
       A[i][j] = rand()%50 - 25;
     }
   }
 
-  for(int i = 0; i < Lb; i++) {
-    for(int j = 0; j < Cb; j++) {
+  for (int i = 0; i < Lb; i++) {
+    for (int j = 0; j < Cb; j++) {
       B[i][j] = rand()%50 - 25;
     }
   }
 
-  for(int i = 0; i < La; i++) {
-    for(int j = 0; j < Cb; j++) {
+  for (int i = 0; i < La; i++) {
+    for (int j = 0; j < Cb; j++) {
       C[i][j] = 0;
-      for(int k = 0; k < Ca; k++) {
+      for (int k = 0; k < Ca; k++) {
         C[i][j] += A[i][k] * B[k][j];
       }
     }
   }
 
-  for(int i = 0; i < La; i++) {
+  for (int i = 0; i < La; i++) {
     printf("Linha %i: ", i);
-    for(int j = 0; j < Cb; j++) {
+    for (int j = 0; j < Cb; j++) {
       printf("%lli", C[i][j]);
       if (j < Cb - 1) {
         printf(" ");

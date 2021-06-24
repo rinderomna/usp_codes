@@ -6,9 +6,7 @@ char *read_line(void);
 int main() {
   int n_lines;
 
-  scanf("%d", &n_lines);
-  
-  getchar(); //Consumes '\n'
+  scanf("%d\n", &n_lines);
   
   char *lines[n_lines];
 

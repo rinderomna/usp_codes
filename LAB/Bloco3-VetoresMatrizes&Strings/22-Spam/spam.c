@@ -30,32 +30,34 @@ int main() {
     {"SOS"}
   };
 
-  while(!isSpam) {
+  while (!isSpam) {
     char c[2];
     c[1] = '\0';
     c[0] = getchar();
 
     char_counter++;
 
-    if(c[0] == EOF) {
+    if (c[0] == EOF) {
       break;
-    } else if(isalpha(c[0])) {
+    } else if (isalpha(c[0])) {
       isLetter = true;
-    } else if(c[0] == '\n' || c[0] == '\r') {
+    } else if (c[0] == '\n' || c[0] == '\r') {
       isLetter = false;
       char_counter = 0;
     } else {
       isLetter = false;
     }
 
-    if(isLetter) {
+    if (isLetter) {
       strcat(comparator, c);
     } else {
-      for(int i = 0; i < 12; i++) {
+      for (int i = 0; i < 12; i++) {
         char *ret = NULL;
-        if(strlen(comparator) >= strlen(forbidden[i])) {
+
+        if (strlen(comparator) >= strlen(forbidden[i])) {
           ret = strstr(comparator, forbidden[i]);
-          if(ret != NULL) {
+
+          if (ret != NULL) {
             forbidden_counter++;
           }
         }
@@ -63,12 +65,11 @@ int main() {
       strcpy(comparator, empty);
     }
 
-    if(char_counter > 76 || forbidden_counter >= 2) {
+    if (char_counter > 76 || forbidden_counter >= 2)
       isSpam = true;
-    }
   }
 
-  if(isSpam)
+  if (isSpam)
     printf("Spam\n");
   else 
     printf("Inbox\n");
