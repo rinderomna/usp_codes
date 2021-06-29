@@ -27,6 +27,7 @@ int main() {
       fullnames = (char ***) realloc(fullnames, n_fullnames * sizeof(char **));
       *(fullnames + n_fullnames - 1) = current_line;
     }
+
   } while (!delimiter_found);
 
   for (int i = 0; i < n_fullnames; i += 2) {
@@ -34,11 +35,14 @@ int main() {
       n_names_in_line[i + 1]++;
       fullnames[i + 1] = (char **) realloc(fullnames[i + 1], n_names_in_line[i + 1] * sizeof(char *));
 
-      char *new_lastname = fullnames[i + 1][n_names_in_line[i + 1] - 1];
+      char *new_lastname;
+      int lastname_len = strlen(fullnames[i][n_names_in_line[i] - 1]);
 
-      new_lastname = (char *) malloc(sizeof(fullnames[i][n_names_in_line[i] - 1]));
+      new_lastname = (char *) malloc(lastname_len + 1);
 
       strcpy(new_lastname, fullnames[i][n_names_in_line[i] - 1]);
+
+      fullnames[i + 1][n_names_in_line[i + 1] - 1] = new_lastname;
     }
   }
 
@@ -77,13 +81,10 @@ char **read_names_inline(bool *delimiter_found, int *n_names) {
     if (!forming_word && isalpha(c)) {
       forming_word = true;
 
-      *n_names = *n_names + 1;
-      names_inline = (char **) realloc(names_inline, *n_names * sizeof(char *));
-
-      current_name = *(names_inline + *n_names - 1);
       current_n_chars = 1;
       current_name = (char *) malloc(current_n_chars);
-      current_name[0] = c;      
+
+      current_name[0] = c;          
 
     } else if (forming_word && isalpha(c)) {
       current_n_chars++;
@@ -91,31 +92,23 @@ char **read_names_inline(bool *delimiter_found, int *n_names) {
       current_name = (char *) realloc(current_name, current_n_chars);
       *(current_name + current_n_chars - 1) = c;
 
-    } else if (forming_word && c == ' ') {
+    } else if (forming_word && (c == ' ' || c == '\n' || c == '$')) {
       current_n_chars++;
 
       current_name = (char *) realloc(current_name, current_n_chars);
       *(current_name + current_n_chars - 1) = '\0';
 
-      forming_word = false;
-      current_n_chars = 0;
+      (*n_names)++;
 
-    } else if (forming_word && c == '$') {
-      current_n_chars++;
-
-      current_name = (char *) realloc(current_name, current_n_chars);
-      *(current_name + current_n_chars - 1) = '\0';
+      names_inline = (char **) realloc(names_inline, *n_names * sizeof(char *));
+      names_inline[*n_names - 1] = current_name; 
 
       forming_word = false;
       current_n_chars = 0;
+    } 
 
-      *delimiter_found = true;
-
-    } else if(!forming_word && c == '$') {
-      *delimiter_found = true;
-
-    }
-  } while (c != '\n' && !delimiter_found);
+    *delimiter_found = (c == '$');
+  } while (c != '\n' && !*delimiter_found);
 
   return names_inline;
 }

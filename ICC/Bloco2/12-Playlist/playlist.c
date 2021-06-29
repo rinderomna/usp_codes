@@ -10,16 +10,16 @@ enum {
 };
 
 typedef struct musica {
-  char* nome;
-  char* artista;
+  char *nome;
+  char *artista;
   int duracao;
 } Musica;
 
 typedef struct playlist {
-  char* nome;
+  char *nome;
   int n_musicas;
   Musica musicas[15];
-  Musica *musica_atual;
+  Musica *musica_atual_;
 } Playlist;
 
 char *read_line(void);
@@ -34,7 +34,7 @@ int main() {
 
   minha_playlist.nome = read_line();
   minha_playlist.n_musicas = 0;
-  minha_playlist.musica_atual = NULL;
+  minha_playlist.musica_atual_ = NULL;
 
   int comando;
 
@@ -81,23 +81,22 @@ char *read_line(void) {
 void adicionar(Playlist *playlist_) {
   if (playlist_->n_musicas == 15) {
     printf("Playlist cheia!\n");
-    return;
-  } 
+  } else {
+    Musica nova_musica;
 
-  Musica nova_musica;
+    nova_musica.nome = read_line();
+    nova_musica.artista = read_line();
+    scanf("%d", &nova_musica.duracao);
 
-  nova_musica.nome = read_line();
-  nova_musica.artista = read_line();
-  scanf("%d", &nova_musica.duracao);
+    playlist_->musicas[playlist_->n_musicas] = nova_musica;
+    
+    playlist_->n_musicas++;
 
-  playlist_->musicas[playlist_->n_musicas] = nova_musica;
-  
-  playlist_->n_musicas++;
+    if (playlist_->n_musicas == 1)
+      playlist_->musica_atual_ = &(playlist_->musicas[0]);
 
-  if (playlist_->n_musicas == 1)
-    playlist_->musica_atual = &(playlist_->musicas[0]);
-
-  printf("Musica %s de %s adicionada com sucesso.\n", nova_musica.nome, nova_musica.artista);
+    printf("Musica %s de %s adicionada com sucesso.\n", nova_musica.nome, nova_musica.artista);
+  }
 }
 
 void listar(Playlist *playlist_) {
@@ -105,7 +104,7 @@ void listar(Playlist *playlist_) {
   printf("Total de musicas: %d\n", playlist_->n_musicas);
 
   for (int i = 0; i < playlist_->n_musicas; i++) {
-    if (playlist_->musica_atual == &playlist_->musicas[i])
+    if (playlist_->musica_atual_ == &playlist_->musicas[i])
       printf("\n=== NOW PLAYING ===\n");
     else
       printf("\n");
@@ -119,9 +118,9 @@ void listar(Playlist *playlist_) {
 
 void avancar(Playlist *playlist_) {
   for (int i = 0; i < playlist_->n_musicas; i++) {
-    if (playlist_->musica_atual == &playlist_->musicas[i]) {
+    if (playlist_->musica_atual_ == &playlist_->musicas[i]) {
       // A playlist sera circular
-      playlist_->musica_atual = &playlist_->musicas[(i + 1) % playlist_->n_musicas];
+      playlist_->musica_atual_ = &playlist_->musicas[(i + 1) % playlist_->n_musicas];
       break;
     }
   }
@@ -129,9 +128,9 @@ void avancar(Playlist *playlist_) {
 
 void retroceder(Playlist *playlist_) {
   for (int i = 0; i < playlist_->n_musicas; i++) {
-    if (playlist_->musica_atual == &playlist_->musicas[i]) {
+    if (playlist_->musica_atual_ == &playlist_->musicas[i]) {
       // A playlist sera circular
-      playlist_->musica_atual = &playlist_->musicas[(playlist_->n_musicas + i - 1) % playlist_->n_musicas];
+      playlist_->musica_atual_ = &playlist_->musicas[(playlist_->n_musicas + i - 1) % playlist_->n_musicas];
       break;
     }
   }
