@@ -1,3 +1,6 @@
+// Hélio Nogueira Cardoso - N°USP: 10310227
+// Trabalho 2 - SCC0221 - Introdução à Ciência de Computação I (2021.01)
+
 #include <stdio.h>
 #include <stdlib.h>
 
@@ -8,134 +11,119 @@
 #define DEAD '.'
 
 typedef struct board {
-    int lines;
-    int columns;
+    int n_lines;
+    int n_columns;
+    char neighborhood;
     char **cells;
 } Board;
 
 void copy_board(Board *destination_board, Board original_board);
-void which_neighbors(Board *board_, int i, int j, char neighborhood, char *neighbors[8]);
-void update_board(Board *board_, char neighborhood);
+void which_neighbors(Board *board_, int i, int j, char neighbors[8]);
+void update_board(Board *board_);
 void error();
 
 int main() {
     Board board;
-    scanf("%i %i", &board.lines, &board.columns);
-    if (board.lines <= 0 || board.columns <= 0) error();
+    scanf("%i %i", &board.n_lines, &board.n_columns);
+    if (board.n_lines <= 0 || board.n_columns <= 0) error();
 
     int n_gen;
     scanf(" %i\n", &n_gen);
     if (n_gen <= 0) error();
 
-    char neighborhood ;
-    neighborhood  = getchar();
+    board.neighborhood = getchar();
+    if (board.neighborhood != MOORE && board.neighborhood != VON_NEUMANN) error();
 
-    char **Board_Cells = (char **) malloc(board.lines * sizeof(char *));
+    char **Board_Cells = (char **) malloc(board.n_lines * sizeof(char *));
     board.cells = Board_Cells;
-    for (int i = 0; i < board.lines; i++)
-        board.cells[i] = (char *) malloc(board.columns * sizeof(char));
+    for (int i = 0; i < board.n_lines; i++) 
+        board.cells[i] = (char *) malloc(board.n_columns * sizeof(char));
 
-    for (int i = 0; i < board.lines; i++)
-        for (int j = 0; j < board.columns; j++) {
+    for (int i = 0; i < board.n_lines; i++)
+        for (int j = 0; j < board.n_columns; j++)
             scanf(" %c", &board.cells[i][j]);
-            char c = getchar();
-            if (c == EOF && !(i == board.lines - 1 && j == board.columns - 1))
-                error();
-            else if (c != EOF) 
-                ungetc(c, stdin);
-        }
 
-    for(int g = 0; g < n_gen; g++) {
-        update_board(&board, neighborhood);
-    }
+    for (int g = 0; g < n_gen; g++) update_board(&board);
 
-    for (int i = 0; i < board.lines; i++) {
-        for (int j = 0; j < board.columns; j++)
-            printf("%c", board.cells[i][j]);
+    for (int i = 0; i < board.n_lines; i++) {
+        for (int j = 0; j < board.n_columns; j++) printf("%c", board.cells[i][j]);
         printf("\n");
     }
 
-    for (int i = 0; i < board.lines; i++)
-        free(board.cells[i]);
+    for (int i = 0; i < board.n_lines; i++) free(board.cells[i]);
     free(board.cells);
 
     return 0;
 }
 
 void copy_board(Board *destination_board_, Board original_board) {
-    destination_board_->lines = original_board.lines;
-    destination_board_->columns = original_board.columns;
+    destination_board_->n_lines = original_board.n_lines;
+    destination_board_->n_columns = original_board.n_columns;
 
-    for (int i = 0; i < destination_board_->lines; i++)
-        for (int j = 0; j < destination_board_->columns; j++)
+    for (int i = 0; i < destination_board_->n_lines; i++)
+        for (int j = 0; j < destination_board_->n_columns; j++)
             destination_board_->cells[i][j] = original_board.cells[i][j];
 }
 
-// Return by reference an array of 8 char pointers (neighbors).
-//  These pointers will point to the 8 neighbors of a (i,j)
-//  cell of the Board, depending on the type of neighborhood
-void which_neighbors(Board *board_, int i, int j, char neighborhood, char *neighbors[8]) {
-    if (neighborhood == MOORE) {
-        neighbors[0] = &board_->cells[i][(j + 1) % board_->columns];
-        neighbors[1] = &board_->cells[(i + 1) % board_->lines][(j + 1) % board_->columns];
-        neighbors[2] = &board_->cells[(i + 1) % board_->lines][j];
-        neighbors[3] = &board_->cells[(i + 1) % board_->lines][(board_->columns + j - 1) % board_->columns];
-        neighbors[4] = &board_->cells[i][(board_->columns + j - 1) % board_->columns];
-        neighbors[5] = &board_->cells[(board_->lines + i - 1) % board_->lines][(board_->columns + j - 1) % board_->columns];
-        neighbors[6] = &board_->cells[(board_->lines + i - 1) % board_->lines][j];
-        neighbors[7] = &board_->cells[(board_->lines + i - 1) % board_->lines][(j + 1) % board_->columns];
-    } else if (neighborhood == VON_NEUMANN) {
-        neighbors[0] = &board_->cells[i][(j + 1) % board_->columns];
-        neighbors[1] = &board_->cells[i][(j + 2) % board_->columns];
-        neighbors[2] = &board_->cells[(i + 1) % board_->lines][j];
-        neighbors[3] = &board_->cells[(i + 2) % board_->lines][j];
-        neighbors[4] = &board_->cells[i][(board_->columns + j - 1) % board_->columns];
-        neighbors[5] = &board_->cells[i][(board_->columns + j - 2) % board_->columns];
-        neighbors[6] = &board_->cells[(board_->lines + i - 1) % board_->lines][j];
-        neighbors[7] = &board_->cells[(board_->lines + i - 2) % board_->lines][j];
+// Change by reference an array of 8 chars (neighbors).
+//  These will be the 8 neighbors of a (i,j) cell of the board,
+//  depending on the type of neighborhood (Moore or Von Neumann)
+void which_neighbors(Board *board_, int i, int j, char neighbors[8]) {
+    int n_lin = board_->n_lines;
+    int n_col = board_->n_columns;
+
+    if (board_->neighborhood == MOORE) {
+        neighbors[0] = board_->cells[i][(j + 1) % n_col];
+        neighbors[1] = board_->cells[(i + 1) % n_lin][(j + 1) % n_col];
+        neighbors[2] = board_->cells[(i + 1) % n_lin][j];
+        neighbors[3] = board_->cells[(i + 1) % n_lin][(n_col + j - 1) % n_col];
+        neighbors[4] = board_->cells[i][(n_col + j - 1) % n_col];
+        neighbors[5] = board_->cells[(n_lin + i - 1) % n_lin][(n_col + j - 1) % n_col];
+        neighbors[6] = board_->cells[(n_lin + i - 1) % n_lin][j];
+        neighbors[7] = board_->cells[(n_lin + i - 1) % n_lin][(j + 1) % n_col];
+    } else if (board_->neighborhood == VON_NEUMANN) {
+        neighbors[0] = board_->cells[i][(j + 1) % n_col];
+        neighbors[1] = board_->cells[i][(j + 2) % n_col];
+        neighbors[2] = board_->cells[(i + 1) % n_lin][j];
+        neighbors[3] = board_->cells[(i + 2) % n_lin][j];
+        neighbors[4] = board_->cells[i][(n_col + j - 1) % n_col];
+        neighbors[5] = board_->cells[i][(n_col + j - 2) % n_col];
+        neighbors[6] = board_->cells[(n_lin + i - 1) % n_lin][j];
+        neighbors[7] = board_->cells[(n_lin + i - 2) % n_lin][j];
     }
 }
 
 // Update the Board 1 generation, depending on the neighborhood type specified
-void update_board(Board *board_, char neighborhood) {
+void update_board(Board *board_) {
     Board new_board;
-    new_board.lines = board_->lines;
-    new_board.columns = board_->columns;
+    new_board.n_lines = board_->n_lines;
+    new_board.n_columns = board_->n_columns;
 
-    char **New_Board_Cells = (char **) malloc(new_board.lines * sizeof(char *));
-    new_board.cells = New_Board_Cells;
-    for (int i = 0; i < new_board.lines; i++)
-        new_board.cells[i] = (char *) malloc(new_board.columns * sizeof(char));
+    char **new_board_cells = (char **) malloc(new_board.n_lines * sizeof(char *));
+    new_board.cells = new_board_cells;
+    for (int i = 0; i < new_board.n_lines; i++)
+        new_board.cells[i] = (char *) malloc(new_board.n_columns * sizeof(char));
 
-    char *neighbors[8];
+    char neighbors[8];
 
-    for (int i = 0; i < board_->lines; i++) {
-        for (int j = 0; j < board_->columns; j++) {
-            int n_alives = 0;
+    for (int i = 0; i < board_->n_lines; i++) {
+        for (int j = 0; j < board_->n_columns; j++) {
+            int n_alive = 0;
 
-            which_neighbors(board_, i, j, neighborhood, neighbors);
+            which_neighbors(board_, i, j, neighbors);
 
             for (int k = 0; k < 8; k++)
-                if (*neighbors[k] == ALIVE) n_alives++;
+                if (neighbors[k] == ALIVE) n_alive++;
 
-            if (board_->cells[i][j] == ALIVE) {
-                if (n_alives < 2 || n_alives > 3) 
-                    new_board.cells[i][j] = DEAD;
-                else
-                    new_board.cells[i][j] = ALIVE;
-            } else if (board_->cells[i][j] == DEAD) {
-                if (n_alives == 3)
-                    new_board.cells[i][j] = ALIVE;
-                else
-                    new_board.cells[i][j] = DEAD;
-            }
-        }
-    }
-
+            if (board_->cells[i][j] == ALIVE)
+              new_board.cells[i][j] = (n_alive < 2 || n_alive > 3) ? DEAD : ALIVE;
+            else if (board_->cells[i][j] == DEAD)
+              new_board.cells[i][j] = (n_alive == 3) ? ALIVE : DEAD;
+        } 
+  }
     copy_board(board_, new_board);
 
-    for (int i = 0; i < board_->lines; i++)
-        free(new_board.cells[i]);
+    for (int i = 0; i < board_->n_lines; i++) free(new_board.cells[i]);
     free(new_board.cells);
 }
 

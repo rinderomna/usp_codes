@@ -15,7 +15,7 @@ typedef struct board {
 } Board;
 
 /* msleep(): Sleep for the requested number of milliseconds. */
-void msleep(long msec){
+void msleep(long msec) {
     struct timespec ts;
 
     ts.tv_sec = msec / 1000;

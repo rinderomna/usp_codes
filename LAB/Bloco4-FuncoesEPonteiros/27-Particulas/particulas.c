@@ -6,148 +6,177 @@
 #define AREIA '#'
 #define CIMENTO '@'
 
-#define LINHAS 32
-#define COLUNAS 64
+#define N_LINHAS 32
+#define N_COLUNAS 64
 
 enum {ORIGINAL, COPIA};
 
 void troca(char *a, char *b);
-void zera_matriz(char Matriz[LINHAS][COLUNAS]);
-void copia_matriz(char Matriz_Destino[LINHAS][COLUNAS], char Matriz_Original[LINHAS][COLUNAS]);
-void imprime_matriz(char Matriz[LINHAS][COLUNAS]);
-void atualiza_fisica(char Matriz_Frame[LINHAS][COLUNAS]);
+void zera_matriz(char matriz[N_LINHAS][N_COLUNAS]);
+void copia_matriz(char matriz_destino[N_LINHAS][N_COLUNAS], 
+  char matriz_original[N_LINHAS][N_COLUNAS]
+);
+void imprime_matriz(char matriz[N_LINHAS][N_COLUNAS]);
+void compara_posicoes(
+  char matriz_frame[N_LINHAS][N_COLUNAS], 
+  char matriz_copia[N_LINHAS][N_COLUNAS], 
+  int i, int j
+);
+void atualiza_fisica(char matriz_frame[N_LINHAS][N_COLUNAS]);
 
 int main() {
-  char Matriz_Frame[LINHAS][COLUNAS];
+  char matriz_frame[N_LINHAS][N_COLUNAS];
   int n_frames, frame, x, y;
-  char Nova_Particula;
+  char nova_particula;
 
-  zera_matriz(Matriz_Frame);
+  zera_matriz(matriz_frame);
 
   scanf("%d", &n_frames);
 
   int contador = 0;
   while (contador < n_frames) {
-    int n_lido = scanf(" %d: %d %d %c", &frame, &x, &y, &Nova_Particula);
+    int n_lido = scanf(" %d: %d %d %c", &frame, &x, &y, &nova_particula);
     
-    if (n_lido == EOF)
-      frame = n_frames;
+    if (n_lido == EOF) frame = n_frames;
     
     while (contador < frame) {
       contador++;
       printf("frame: %d\n", contador);
-      imprime_matriz(Matriz_Frame);
-      atualiza_fisica(Matriz_Frame);
+      imprime_matriz(matriz_frame);
+      atualiza_fisica(matriz_frame);
     }
     
-    if (n_lido != EOF)
-      Matriz_Frame[y][x] = Nova_Particula;
+    if (n_lido != EOF) matriz_frame[y][x] = nova_particula;
   }
 
   return 0;
 }
 
 void troca(char *a, char *b) {
-  char aux;
-  aux = *a;
+  char temp;
+  temp = *a;
   *a = *b;
-  *b = aux;
+  *b = temp;
 }
 
-void zera_matriz(char Matriz[LINHAS][COLUNAS]) {
-  for (int i = 0; i < LINHAS; i++)
-    for (int j = 0; j < COLUNAS; j++) 
-      Matriz[i][j] = AR;
+void zera_matriz(char matriz[N_LINHAS][N_COLUNAS]) {
+  for (int i = 0; i < N_LINHAS; i++)
+    for (int j = 0; j < N_COLUNAS; j++) 
+      matriz[i][j] = AR;
 }
 
-void copia_matriz(char Matriz_Destino[LINHAS][COLUNAS], char Matriz_Original[LINHAS][COLUNAS]) {
-  for (int i = 0; i < LINHAS; i++) 
-    for (int j = 0; j < COLUNAS; j++) 
-      Matriz_Destino[i][j] = Matriz_Original[i][j]; 
+void copia_matriz(char matriz_destino[N_LINHAS][N_COLUNAS], 
+  char matriz_original[N_LINHAS][N_COLUNAS]
+) {
+  for (int i = 0; i < N_LINHAS; i++) 
+    for (int j = 0; j < N_COLUNAS; j++) 
+      matriz_destino[i][j] = matriz_original[i][j]; 
 }
 
-void imprime_matriz(char Matriz[LINHAS][COLUNAS]) {
-  for (int i = 0; i < LINHAS; i++) {
-    for (int j = 0; j < COLUNAS; j++) 
-      printf("%c", Matriz[i][j]);
+void imprime_matriz(char matriz[N_LINHAS][N_COLUNAS]) {
+  for (int i = 0; i < N_LINHAS; i++) {
+    for (int j = 0; j < N_COLUNAS; j++) printf("%c", matriz[i][j]);
     printf("\n");
   }
 }
 
-void atualiza_fisica(char Matriz_Frame[LINHAS][COLUNAS]) {
-  // Criação de uma cópia da Matriz Frame onde serão feitas as alterações
-  // (Na Matriz Frame serão feitas as comparações)
+void compara_posicoes(
+  char matriz_frame[N_LINHAS][N_COLUNAS], 
+  char matriz_copia[N_LINHAS][N_COLUNAS], 
+  int i, int j
+) {
+  // Para cada partícula (i, j), poderá-se fazer comparações para 
+  // uma possível troca de posições. Como apenas Areia e Água 
+  // fazem comparações, a comparação só será feita quando a 
+  // partícula atual (i, j) for de algum desses tipos
+  
+  if (matriz_frame[i][j] == AREIA || matriz_frame[i][j] == AGUA) {
+    // Os comparadores guardam os ponteiros para as posições de 
+    // comparação de cada partícula (i, j). Eles são 5 posições 
+    // definidas em ordem decrescente de prioridade de 0 a 4 
+    // (primeiro índice da matriz). O segundo índice da matriz 
+    // de comparadores indica em qual matriz o elemento está:
+    //   * 0 para na matriz Original
+    //   * 1 para na matriz Cópia
 
-  char Matriz_Copia[LINHAS][COLUNAS];
+    char *comparador[5][2];
 
-  copia_matriz(Matriz_Copia, Matriz_Frame);
+    char borda = CIMENTO;
+    for (int i = 0; i < 5; i++)
+      for (int j = 0; j < 2; j++)
+        comparador[i][j] = &borda;
 
-  // Percorrendo a matriz do topo para baixo, da esquerda para a direita, em posições (i, j)
+    // Caso a posição de comparação exceda as dimensões da matriz 
+    // frame, ao comparador é atribuído um ponteiro para um cimento
 
-  for (int i = 0; i < LINHAS; i++) {
-    for (int j = 0; j < COLUNAS; j++) {
-      // Para cada partícula (i, j), poderá-se fazer comparações para uma possível troca de posições.
-      // Como apenas Areia e Água fazem comparações, a comparação só será feita quando a
-      // partícula atual (i, j) for de algum desses tipos
-      
-      if (Matriz_Frame[i][j] == AREIA || Matriz_Frame[i][j] == AGUA) {
-        // Os Comparadores guardam os ponteiros para as posições de comparação de cada partícula (i, j)
-        // Eles são 5 posições definidas em ordem decrescente de prioridade de 0 a 4 (primeiro índice da matriz)
-        // O segundo índice da matriz de comparadores indica em qual matriz o elemento está (enum definido):
-        //   * 0 para na Matriz Original
-        //   * 1 para na Matriz Cópia
+    if (i != N_LINHAS - 1) {
+      comparador[0][ORIGINAL] = &matriz_frame[i + 1][j];
+      comparador[0][COPIA] = &matriz_copia[i + 1][j];
+    }
+    if (i != N_LINHAS - 1 && j != 0) {
+      comparador[1][ORIGINAL] = &matriz_frame[i + 1][j - 1];
+      comparador[1][COPIA] = &matriz_copia[i + 1][j - 1];
+    }
+    if (i != N_LINHAS - 1 && j != N_COLUNAS - 1) {
+      comparador[2][ORIGINAL] = &matriz_frame[i + 1][j + 1];
+      comparador[2][COPIA] = &matriz_copia[i + 1][j + 1];
+    }
+    if (j != 0) {
+      comparador[3][ORIGINAL] = &matriz_frame[i][j - 1];
+      comparador[3][COPIA] = &matriz_copia[i][j - 1];
+    }
+    if (j != N_COLUNAS - 1) {
+      comparador[4][ORIGINAL] = &matriz_frame[i][j + 1];
+      comparador[4][COPIA] = &matriz_copia[i][j + 1];
+    }
 
-        char *Comparador[5][2];
-        char Borda = CIMENTO;
-
-        // Caso a posição de comparação exceda as dimensões da Matriz Frame,
-        // ao comparador é atribuído um ponteiro para um cimento
-
-        Comparador[0][ORIGINAL] = (i == LINHAS - 1) ? &Borda : &Matriz_Frame[i + 1][j];
-        Comparador[1][ORIGINAL] = (i == LINHAS - 1 || j == 0) ? &Borda : &Matriz_Frame[i + 1][j - 1];
-        Comparador[2][ORIGINAL] = (i == LINHAS - 1 || j == COLUNAS - 1) ? &Borda : &Matriz_Frame[i + 1][j + 1];
-        Comparador[3][ORIGINAL] = (j == 0) ? &Borda : &Matriz_Frame[i][j - 1];
-        Comparador[4][ORIGINAL] = (j == COLUNAS - 1) ? &Borda : &Matriz_Frame[i][j + 1];
-
-        Comparador[0][COPIA] = (i == LINHAS - 1) ? &Borda : &Matriz_Copia[i + 1][j];
-        Comparador[1][COPIA] = (i == LINHAS - 1 || j == 0) ? &Borda : &Matriz_Copia[i + 1][j - 1];
-        Comparador[2][COPIA] = (i == LINHAS - 1 || j == COLUNAS - 1) ? &Borda : &Matriz_Copia[i + 1][j + 1];
-        Comparador[3][COPIA] = (j == 0) ? &Borda : &Matriz_Copia[i][j - 1];
-        Comparador[4][COPIA] = (j == COLUNAS - 1) ? &Borda : &Matriz_Copia[i][j + 1];
-
-        switch (Matriz_Frame[i][j]) {
-          case AREIA:
-            // Areia faz a comparação com os 3 primeiros comparadores
-            // Se Água ou Ar for encontrado primeiro no comparador da Matriz Original,
-            // troca na Matriz Copia com a mesma posição de comparação
-            for (int k = 0; k < 3; k++) {
-              if (*Comparador[k][ORIGINAL] == AGUA || *Comparador[k][ORIGINAL] == AR) {
-                troca(Comparador[k][COPIA], &Matriz_Copia[i][j]);
-                break;
-              }
-            }
+    switch (matriz_frame[i][j]) {
+      case AREIA:
+        // Areia faz a comparação com os 3 primeiros comparadores
+        // Se Água ou Ar for encontrado primeiro no comparador da matriz 
+        // original, troca na matriz Copia com a mesma posição de comparação
+        for (int k = 0; k < 3; k++) {
+          if (*comparador[k][ORIGINAL] == AGUA || *comparador[k][ORIGINAL] == AR) {
+            troca(comparador[k][COPIA], &matriz_copia[i][j]);
             break;
-          case AGUA:
-            // Água faz a comparação com todos os 5 comparadores
-            // Se Ar for encontrado primeiro no comparador da Matriz Original,
-            // troca na Matriz Copia com a mesma posição de comparação
-            for (int k = 0; k < 5; k++) {
-              if (*Comparador[k][ORIGINAL] == AR) {
-                troca(Comparador[k][COPIA], &Matriz_Copia[i][j]);
-                break;
-              }
-            }
-            break;
-          // Ar pode ser movido, mas não faz comparações
-          // Cimento não faz comparações, nem pode ser movido
+          }
         }
-      }
+        break;
+      case AGUA:
+        // Água faz a comparação com todos os 5 comparadores
+        // Se Ar for encontrado primeiro no comparador da matriz original,
+        // troca na matriz Copia com a mesma posição de comparação
+        for (int k = 0; k < 5; k++) {
+          if (*comparador[k][ORIGINAL] == AR) {
+            troca(comparador[k][COPIA], &matriz_copia[i][j]);
+            break;
+          }
+        }
+        break;
+      // Ar pode ser movido, mas não faz comparações
+      // Cimento não faz comparações, nem pode ser movido
     }
   }
+}
 
-  // Após as alterações na Matriz Copia, 
-  // elas são todas passadas para a Matriz Frame,
+void atualiza_fisica(char matriz_frame[N_LINHAS][N_COLUNAS]) {
+  // Criação de uma cópia da matriz Frame onde serão feitas 
+  // as alterações (na matriz Frame serão feitas as comparações)
+
+  char matriz_copia[N_LINHAS][N_COLUNAS];
+
+  copia_matriz(matriz_copia, matriz_frame);
+
+  // Percorrendo a matriz do topo para baixo, da esquerda 
+  // para a direita, em posições (i, j)
+
+  for (int i = 0; i < N_LINHAS; i++) 
+    for (int j = 0; j < N_COLUNAS; j++)
+      compara_posicoes(matriz_frame, matriz_copia, i, j);    
+
+  // Após as alterações na matriz Copia, 
+  // elas são todas passadas para a matriz Frame,
   // que estará, por fim, com a física atualizada
 
-  copia_matriz(Matriz_Frame, Matriz_Copia);
+  copia_matriz(matriz_frame, matriz_copia);
 }
