@@ -35,7 +35,7 @@ int main() {
     if (n_gen <= 0) 
         error();
 
-    // Read type of neighborhoor and treat errors:
+    // Read type of neighborhood and treat errors:
     board.neighborhood = getchar();
     if (board.neighborhood != MOORE && board.neighborhood != VON_NEUMANN) 
         error();
