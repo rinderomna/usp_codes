@@ -125,7 +125,7 @@ void update_board(Board *board_) {
     for (int i = 0; i < board_->n_lines; i++) {
         for (int j = 0; j < board_->n_columns; j++) {
             
-            // Count alive cell on neighborhood:
+            // Count alive cells on neighborhood:
             int n_alive = 0;
 
             which_neighbors(board_, i, j, neighbors);
@@ -133,7 +133,7 @@ void update_board(Board *board_) {
             for (int k = 0; k < 8; k++)
                 if (neighbors[k] == ALIVE) n_alive++;
 
-            // Implement update logic based:
+            // Implement update logic:
             if (board_->cells[i][j] == ALIVE)
               new_board.cells[i][j] = (n_alive < 2 || n_alive > 3) ? DEAD : ALIVE;
             else if (board_->cells[i][j] == DEAD)
@@ -144,7 +144,6 @@ void update_board(Board *board_) {
     // Original board receive all updates from auxiliary new board:
     copy_board(board_, new_board);
 
-    // Free the auxiliary new board:
     for (int i = 0; i < board_->n_lines; i++) 
         free(new_board.cells[i]);
     free(new_board.cells);

@@ -8,6 +8,8 @@
 #define ALIVE 'x'
 #define DEAD '.'
 
+#define TEMPO 200
+
 typedef struct board {
     int lines;
     int columns;
@@ -22,6 +24,18 @@ void msleep(long msec) {
     ts.tv_nsec = (msec % 1000) * 1000000;
 
     nanosleep(&ts, &ts);
+}
+
+void show_cell(char particula) {
+    switch (particula) {
+        case ALIVE:
+            printf("\033[0;100m");
+            break;
+        case DEAD:
+            printf("\033[0;107m");
+            break;
+    }
+    printf(" \033[0m");
 }
 
 void copy_board(Board *destination_board, Board original_board);
@@ -61,21 +75,15 @@ int main(int argc, char *argv[]) {
     for(int g = 0; g < n_gen; g++) {
         for (int i = 0; i < board.lines; i++) {
             for (int j = 0; j < board.columns; j++)
-                printf("%c", board.cells[i][j]);
+                show_cell(board.cells[i][j]);
             printf("\n");
         }
 
-        msleep(500);
+        msleep(TEMPO);
 
         update_board(&board, neighborhood);
 
         system("clear");
-    }
-
-    for (int i = 0; i < board.lines; i++) {
-        for (int j = 0; j < board.columns; j++)
-            printf("%c", board.cells[i][j]);
-        printf("\n");
     }
 
     for (int i = 0; i < board.lines; i++)

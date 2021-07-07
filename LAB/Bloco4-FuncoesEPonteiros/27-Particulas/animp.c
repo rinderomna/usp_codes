@@ -21,12 +21,12 @@ void msleep(long msec){
   nanosleep(&ts, &ts);
 }
 
-void mostrar_particula(char particula);
 void troca(char *a, char *b);
 void zera_matriz(char matriz[N_LINHAS][N_COLUNAS]);
 void copia_matriz(char matriz_destino[N_LINHAS][N_COLUNAS], 
   char matriz_original[N_LINHAS][N_COLUNAS]
 );
+void mostrar_particula(char particula);
 void imprime_matriz(char matriz[N_LINHAS][N_COLUNAS]);
 void compara_posicoes(
   char matriz_frame[N_LINHAS][N_COLUNAS], 
@@ -65,24 +65,6 @@ int main() {
   return 0;
 }
 
-void mostrar_particula(char particle) {
-    switch (particle) {
-        case CIMENTO:
-            printf("\033[1;31m");
-            break;
-        case AREIA:
-            printf("\033[0;33m");
-            break;
-        case AR:
-            printf("\033[2;34m");
-            break;
-        case AGUA:
-            printf("\033[0;34m");
-            break;
-    }
-    printf("%c\033[0m", particle);
-}
-
 void troca(char *a, char *b) {
   char temp;
   temp = *a;
@@ -104,26 +86,44 @@ void copia_matriz(char matriz_destino[N_LINHAS][N_COLUNAS],
       matriz_destino[i][j] = matriz_original[i][j]; 
 }
 
-void imprime_matriz(char matriz[N_LINHAS][N_COLUNAS]) {
-  
-  for (int i = 0; i < N_COLUNAS + 2; i++)
-    mostrar_particula(CIMENTO);
-  printf("\n");
-
-  for (int i = 0; i < N_LINHAS; i++) {
-    mostrar_particula(CIMENTO);
-
-    for (int j = 0; j < N_COLUNAS; j++) {
-      mostrar_particula(matriz[i][j]);
+void mostrar_particula(char particula) {
+    switch (particula) {
+        case CIMENTO:
+            printf("\033[1;31m");
+            break;
+        case AREIA:
+            printf("\033[0;33m");
+            break;
+        case AR:
+            printf("\033[2;34m");
+            break;
+        case AGUA:
+            printf("\033[0;34m");
+            break;
     }
-    
-    mostrar_particula(CIMENTO);
-    printf("\n");
-  }
+    printf("%c\033[0m", particula);
+}
 
-  for (int i = 0; i < N_COLUNAS + 2; i++)
-    mostrar_particula(CIMENTO);
-  printf("\n");
+void imprime_matriz(char matriz[N_LINHAS][N_COLUNAS]) {
+
+    for (int i = 0; i < 66; i++) {
+        mostrar_particula(CIMENTO);
+    }
+    printf("\n");
+
+    for (int i = 0; i < N_LINHAS; i++) {
+        mostrar_particula(CIMENTO);
+        for (int j = 0; j < N_COLUNAS; j++) {
+            mostrar_particula(matriz[i][j]);
+        }
+        mostrar_particula(CIMENTO);
+        printf("\n");
+    } 
+
+    for (int i = 0; i < 66; i++) {
+        mostrar_particula(CIMENTO);
+    }
+    printf("\n");
 }
 
 void compara_posicoes(
