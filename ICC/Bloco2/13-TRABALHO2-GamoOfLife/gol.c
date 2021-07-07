@@ -23,34 +23,48 @@ void update_board(Board *board_);
 void error();
 
 int main() {
+    // Read board dimensions and treat errors:
     Board board;
     scanf("%i %i", &board.n_lines, &board.n_columns);
-    if (board.n_lines <= 0 || board.n_columns <= 0) error();
+    if (board.n_lines <= 0 || board.n_columns <= 0) 
+        error();
 
+    // Read number of generations and treat errors:
     int n_gen;
     scanf(" %i\n", &n_gen);
-    if (n_gen <= 0) error();
+    if (n_gen <= 0) 
+        error();
 
+    // Read type of neighborhoor and treat errors:
     board.neighborhood = getchar();
-    if (board.neighborhood != MOORE && board.neighborhood != VON_NEUMANN) error();
+    if (board.neighborhood != MOORE && board.neighborhood != VON_NEUMANN) 
+        error();
 
+    // Allocate the board cells matrix in the Heap:
     char **Board_Cells = (char **) malloc(board.n_lines * sizeof(char *));
     board.cells = Board_Cells;
     for (int i = 0; i < board.n_lines; i++) 
         board.cells[i] = (char *) malloc(board.n_columns * sizeof(char));
 
+    // Read the initial board:
     for (int i = 0; i < board.n_lines; i++)
         for (int j = 0; j < board.n_columns; j++)
             scanf(" %c", &board.cells[i][j]);
 
-    for (int g = 0; g < n_gen; g++) update_board(&board);
+    // Update the board n_gen generations:
+    for (int g = 0; g < n_gen; g++) 
+        update_board(&board);
 
+    // Print last generation board:
     for (int i = 0; i < board.n_lines; i++) {
-        for (int j = 0; j < board.n_columns; j++) printf("%c", board.cells[i][j]);
+        for (int j = 0; j < board.n_columns; j++) {
+            printf("%c", board.cells[i][j]);
+        }
         printf("\n");
     }
 
-    for (int i = 0; i < board.n_lines; i++) free(board.cells[i]);
+    for (int i = 0; i < board.n_lines; i++) 
+        free(board.cells[i]);
     free(board.cells);
 
     return 0;
@@ -95,6 +109,7 @@ void which_neighbors(Board *board_, int i, int j, char neighbors[8]) {
 
 // Update the Board 1 generation, depending on the neighborhood type specified
 void update_board(Board *board_) {
+    // Create an empty board to receive the updates:
     Board new_board;
     new_board.n_lines = board_->n_lines;
     new_board.n_columns = board_->n_columns;
@@ -106,8 +121,11 @@ void update_board(Board *board_) {
 
     char neighbors[8];
 
+    // Access each (i, j) cell to make comparisons:
     for (int i = 0; i < board_->n_lines; i++) {
         for (int j = 0; j < board_->n_columns; j++) {
+            
+            // Count alive cell on neighborhood:
             int n_alive = 0;
 
             which_neighbors(board_, i, j, neighbors);
@@ -115,15 +133,20 @@ void update_board(Board *board_) {
             for (int k = 0; k < 8; k++)
                 if (neighbors[k] == ALIVE) n_alive++;
 
+            // Implement update logic based:
             if (board_->cells[i][j] == ALIVE)
               new_board.cells[i][j] = (n_alive < 2 || n_alive > 3) ? DEAD : ALIVE;
             else if (board_->cells[i][j] == DEAD)
               new_board.cells[i][j] = (n_alive == 3) ? ALIVE : DEAD;
         } 
-  }
+    }
+    
+    // Original board receive all updates from auxiliary new board:
     copy_board(board_, new_board);
 
-    for (int i = 0; i < board_->n_lines; i++) free(new_board.cells[i]);
+    // Free the auxiliary new board:
+    for (int i = 0; i < board_->n_lines; i++) 
+        free(new_board.cells[i]);
     free(new_board.cells);
 }
 
