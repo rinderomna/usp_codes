@@ -18,7 +18,7 @@ typedef struct musica {
 typedef struct playlist {
   char *nome;
   int n_musicas;
-  Musica musicas[15];
+  Musica *musicas;
   Musica *musica_atual_;
 } Playlist;
 
@@ -34,6 +34,7 @@ int main() {
 
   minha_playlist.nome = read_line();
   minha_playlist.n_musicas = 0;
+  minha_playlist.musicas = NULL;
   minha_playlist.musica_atual_ = NULL;
 
   char comando;
@@ -87,6 +88,22 @@ void adicionar(Playlist *playlist_) {
     nova_musica.nome = read_line();
     nova_musica.artista = read_line();
     scanf("%d", &nova_musica.duracao);
+
+
+    // Buscando index da música atual, para que na realocação
+    // não corra o risco de perder a referência da música atual.
+    int index_musica_atual;
+
+    for (int i = 0; i < playlist_->n_musicas; i++) {
+      if (playlist_->musica_atual_ == &playlist_->musicas[i]) {
+        index_musica_atual = i;
+        break;
+      }
+    }
+
+    playlist_->musicas = (Musica *) realloc(playlist_->musicas, (playlist_->n_musicas + 1) * sizeof(Musica));
+
+    playlist_->musica_atual_ = &playlist_->musicas[index_musica_atual];
 
     playlist_->musicas[playlist_->n_musicas] = nova_musica;
     
@@ -142,4 +159,5 @@ void limpar(Playlist *playlist_) {
     free(playlist_->musicas[i].artista);
   }
   free(playlist_->nome);
+  free(playlist_->musicas);
 } 
