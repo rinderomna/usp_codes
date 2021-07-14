@@ -9,9 +9,9 @@ int main() {
 	}
 
 	/* Começo do código traduzido de BF */
-	while(mem[i]){
+	while (mem[i]) {
 		putchar(mem[i]);
-		while(mem[i]){
+		while (mem[i]) {
 			putchar(mem[i]);
 		}
 		putchar(mem[i]);
@@ -20,7 +20,7 @@ int main() {
 		mem[i]--;
 		i--;
 		i++;
-		while(mem[i]){
+		while (mem[i]) {
 		}
 		putchar(mem[i]);
 		putchar(mem[i]);
@@ -33,13 +33,13 @@ int main() {
 	mem[i]++;
 	mem[i]++;
 	mem[i]++;
-	while(mem[i]){
+	while (mem[i]) {
 		i++;
 		mem[i]++;
 		mem[i]++;
 		mem[i]++;
 		mem[i]++;
-		while(mem[i]){
+		while (mem[i]) {
 			i++;
 			mem[i]++;
 			mem[i]++;
@@ -68,7 +68,7 @@ int main() {
 		i++;
 		i++;
 		mem[i]++;
-		while(mem[i]){
+		while (mem[i]) {
 			i--;
 		}
 		i--;

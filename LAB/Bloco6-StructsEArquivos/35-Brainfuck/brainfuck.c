@@ -47,7 +47,7 @@ int main() {
                 break;
             case '[':
                 indentar(cfile, nivel_indentacao);
-                fprintf(cfile, "\twhile(mem[i]){\n");
+                fprintf(cfile, "\twhile (mem[i]) {\n");
                 nivel_indentacao++;
                 break;
             case ']':
