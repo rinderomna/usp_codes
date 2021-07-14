@@ -2,7 +2,7 @@
 #include <stdlib.h>
 
 int main() {
-  // Read Origanl Image Dimensions
+  // Read Original Image Dimensions
   int img_height, img_width;
 
   scanf("%d %d", &img_width, &img_height);
