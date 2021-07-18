@@ -9,7 +9,11 @@ int main() {
 
   scanf(" %d", &n_types);
 
-  float Types_Relation[n_types][n_types];
+  float **Types_Relation;
+
+  Types_Relation = (float **) malloc(n_types * sizeof(float *));
+  for (int i = 0; i < n_types; i++)
+    Types_Relation[i] = (float *) malloc(n_types * sizeof(float));
 
   for (int i = 0; i < n_types; i++)
     for (int j = 0; j < n_types; j++)
@@ -59,6 +63,10 @@ int main() {
   for(int i = 0; i < n_attacks; i++)
     free(attacks[i]);
   free(attacks);
+
+  for (int i = 0; i < n_types; i++)
+    free(Types_Relation[i]);
+  free(Types_Relation);
 
   printf("O melhor ataque possui indice %d e dano %.2f\n", best_attack_index, best_damage);
 

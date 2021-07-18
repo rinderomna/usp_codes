@@ -9,47 +9,431 @@ int main() {
 	}
 
 	/* Começo do código traduzido de BF */
+	mem[i]++;
+	mem[i]++;
+	mem[i]++;
+	mem[i]++;
+	mem[i]++;
+	mem[i]++;
+	mem[i]++;
+	mem[i]++;
+	mem[i]++;
+	mem[i]++;
+	mem[i]++;
+	i++;
+	mem[i]++;
+	i++;
+	i++;
+	i++;
+	i++;
+	mem[i]++;
+	mem[i]++;
+	mem[i]++;
+	mem[i]++;
+	mem[i]++;
+	mem[i]++;
+	mem[i]++;
+	mem[i]++;
+	mem[i]++;
+	mem[i]++;
+	mem[i]++;
+	mem[i]++;
+	mem[i]++;
+	mem[i]++;
+	mem[i]++;
+	mem[i]++;
+	mem[i]++;
+	mem[i]++;
+	mem[i]++;
+	mem[i]++;
+	mem[i]++;
+	mem[i]++;
+	mem[i]++;
+	mem[i]++;
+	mem[i]++;
+	mem[i]++;
+	mem[i]++;
+	mem[i]++;
+	mem[i]++;
+	mem[i]++;
+	mem[i]++;
+	mem[i]++;
+	mem[i]++;
+	mem[i]++;
+	mem[i]++;
+	mem[i]++;
+	mem[i]++;
+	mem[i]++;
+	mem[i]++;
+	mem[i]++;
+	mem[i]++;
+	mem[i]++;
+	mem[i]++;
+	mem[i]++;
+	i++;
+	mem[i]++;
+	mem[i]++;
+	mem[i]++;
+	mem[i]++;
+	mem[i]++;
+	mem[i]++;
+	mem[i]++;
+	mem[i]++;
+	mem[i]++;
+	mem[i]++;
+	mem[i]++;
+	mem[i]++;
+	mem[i]++;
+	mem[i]++;
+	mem[i]++;
+	mem[i]++;
+	mem[i]++;
+	mem[i]++;
+	mem[i]++;
+	mem[i]++;
+	mem[i]++;
+	mem[i]++;
+	mem[i]++;
+	mem[i]++;
+	mem[i]++;
+	mem[i]++;
+	mem[i]++;
+	mem[i]++;
+	mem[i]++;
+	mem[i]++;
+	mem[i]++;
+	mem[i]++;
+	i--;
+	i--;
+	i--;
+	i--;
+	i--;
+	i--;
 	while (mem[i]) {
-		putchar(mem[i]);
+		i++;
 		while (mem[i]) {
-			putchar(mem[i]);
+			i++;
+			i++;
+			i++;
+			i++;
+			i++;
+			i++;
+			mem[i]++;
+			i++;
+			mem[i]++;
+			i--;
+			i--;
+			i--;
+			i--;
+			i--;
+			i--;
+			i--;
+			mem[i]--;
 		}
-		putchar(mem[i]);
-		putchar(mem[i]);
-		mem[i]++;
-		mem[i]--;
+		i++;
+		i++;
+		i++;
+		i++;
+		i++;
+		i++;
+		i++;
+		while (mem[i]) {
+			i--;
+			i--;
+			i--;
+			i--;
+			i--;
+			i--;
+			i--;
+			mem[i]++;
+			i++;
+			i++;
+			i++;
+			i++;
+			i++;
+			i++;
+			i++;
+			mem[i]--;
+		}
 		i--;
-		i++;
 		while (mem[i]) {
+			i++;
+			mem[i]++;
+			mem[i]++;
+			mem[i]++;
+			mem[i]++;
+			mem[i]++;
+			mem[i]++;
+			mem[i]++;
+			mem[i]++;
+			mem[i]++;
+			mem[i]++;
+			while (mem[i]) {
+				mem[i]--;
+				i--;
+				mem[i]--;
+				while (mem[i]) {
+					i++;
+					i++;
+					mem[i]++;
+					i++;
+					mem[i]++;
+					i--;
+					i--;
+					i--;
+					mem[i]--;
+				}
+				i++;
+				i++;
+				i++;
+				while (mem[i]) {
+					i--;
+					i--;
+					i--;
+					mem[i]++;
+					i++;
+					i++;
+					i++;
+					mem[i]--;
+				}
+				mem[i]++;
+				i--;
+				while (mem[i]) {
+					i++;
+					while (mem[i]) {
+						mem[i]--;
+					}
+					i--;
+					while (mem[i]) {
+						mem[i]--;
+					}
+				}
+				i++;
+				while (mem[i]) {
+					i--;
+					i--;
+					while (mem[i]) {
+						i++;
+						i++;
+						i++;
+						mem[i]++;
+						i--;
+						i--;
+						i--;
+						mem[i]--;
+					}
+					i++;
+					i++;
+					while (mem[i]) {
+						mem[i]--;
+					}
+				}
+				i--;
+				i--;
+			}
+			i++;
+			i++;
+			i++;
+			while (mem[i]) {
+				i++;
+				i++;
+				mem[i]++;
+				i++;
+				mem[i]++;
+				i--;
+				i--;
+				i--;
+				mem[i]--;
+			}
+			i++;
+			i++;
+			i++;
+			while (mem[i]) {
+				i--;
+				i--;
+				i--;
+				mem[i]++;
+				i++;
+				i++;
+				i++;
+				mem[i]--;
+			}
+			mem[i]++;
+			i--;
+			while (mem[i]) {
+				i++;
+				while (mem[i]) {
+					mem[i]--;
+				}
+				i--;
+				while (mem[i]) {
+					mem[i]--;
+				}
+			}
+			i++;
+			while (mem[i]) {
+				i--;
+				i--;
+				mem[i]++;
+				i++;
+				i++;
+				while (mem[i]) {
+					mem[i]--;
+				}
+			}
+			i--;
+			i--;
+			i--;
+			i--;
+			i--;
+			i--;
+			i--;
 		}
-		putchar(mem[i]);
-		putchar(mem[i]);
-	}
-	mem[i]++;
-	mem[i]++;
-	mem[i]++;
-	mem[i]++;
-	mem[i]++;
-	mem[i]++;
-	mem[i]++;
-	mem[i]++;
-	while (mem[i]) {
+		i++;
+		i++;
+		i++;
+		i++;
+		i++;
+		while (mem[i]) {
+			mem[i]++;
+			mem[i]++;
+			mem[i]++;
+			mem[i]++;
+			mem[i]++;
+			mem[i]++;
+			mem[i]++;
+			mem[i]++;
+			mem[i]++;
+			mem[i]++;
+			mem[i]++;
+			mem[i]++;
+			mem[i]++;
+			mem[i]++;
+			mem[i]++;
+			mem[i]++;
+			mem[i]++;
+			mem[i]++;
+			mem[i]++;
+			mem[i]++;
+			mem[i]++;
+			mem[i]++;
+			mem[i]++;
+			mem[i]++;
+			mem[i]++;
+			mem[i]++;
+			mem[i]++;
+			mem[i]++;
+			mem[i]++;
+			mem[i]++;
+			mem[i]++;
+			mem[i]++;
+			mem[i]++;
+			mem[i]++;
+			mem[i]++;
+			mem[i]++;
+			mem[i]++;
+			mem[i]++;
+			mem[i]++;
+			mem[i]++;
+			mem[i]++;
+			mem[i]++;
+			mem[i]++;
+			mem[i]++;
+			mem[i]++;
+			mem[i]++;
+			mem[i]++;
+			mem[i]++;
+			putchar(mem[i]);
+			while (mem[i]) {
+				mem[i]--;
+			}
+		}
+		mem[i]++;
+		mem[i]++;
+		mem[i]++;
+		mem[i]++;
+		mem[i]++;
+		mem[i]++;
+		mem[i]++;
+		mem[i]++;
+		mem[i]++;
+		mem[i]++;
+		i--;
+		while (mem[i]) {
+			mem[i]--;
+			i++;
+			mem[i]--;
+			i--;
+		}
 		i++;
 		mem[i]++;
 		mem[i]++;
 		mem[i]++;
 		mem[i]++;
+		mem[i]++;
+		mem[i]++;
+		mem[i]++;
+		mem[i]++;
+		mem[i]++;
+		mem[i]++;
+		mem[i]++;
+		mem[i]++;
+		mem[i]++;
+		mem[i]++;
+		mem[i]++;
+		mem[i]++;
+		mem[i]++;
+		mem[i]++;
+		mem[i]++;
+		mem[i]++;
+		mem[i]++;
+		mem[i]++;
+		mem[i]++;
+		mem[i]++;
+		mem[i]++;
+		mem[i]++;
+		mem[i]++;
+		mem[i]++;
+		mem[i]++;
+		mem[i]++;
+		mem[i]++;
+		mem[i]++;
+		mem[i]++;
+		mem[i]++;
+		mem[i]++;
+		mem[i]++;
+		mem[i]++;
+		mem[i]++;
+		mem[i]++;
+		mem[i]++;
+		mem[i]++;
+		mem[i]++;
+		mem[i]++;
+		mem[i]++;
+		mem[i]++;
+		mem[i]++;
+		mem[i]++;
+		mem[i]++;
+		putchar(mem[i]);
+		while (mem[i]) {
+			mem[i]--;
+		}
+		i--;
+		i--;
+		i--;
+		i--;
+		i--;
+		i--;
+		i--;
+		i--;
+		i--;
+		i--;
+		i--;
+		i--;
 		while (mem[i]) {
 			i++;
-			mem[i]++;
-			mem[i]++;
 			i++;
-			mem[i]++;
-			mem[i]++;
-			mem[i]++;
 			i++;
-			mem[i]++;
-			mem[i]++;
 			mem[i]++;
 			i++;
 			mem[i]++;
@@ -60,77 +444,82 @@ int main() {
 			mem[i]--;
 		}
 		i++;
-		mem[i]++;
-		i++;
-		mem[i]++;
-		i++;
-		mem[i]--;
 		i++;
 		i++;
-		mem[i]++;
+		i++;
 		while (mem[i]) {
 			i--;
+			i--;
+			i--;
+			i--;
+			mem[i]++;
+			i++;
+			i++;
+			i++;
+			i++;
+			mem[i]--;
 		}
 		i--;
 		mem[i]--;
+		while (mem[i]) {
+			i++;
+			i++;
+			putchar(mem[i]);
+			i++;
+			putchar(mem[i]);
+			i--;
+			i--;
+			i--;
+			while (mem[i]) {
+				mem[i]--;
+			}
+		}
+		i--;
+		i--;
+		while (mem[i]) {
+			i++;
+			i++;
+			mem[i]++;
+			i++;
+			mem[i]++;
+			i--;
+			i--;
+			i--;
+			mem[i]--;
+		}
+		i++;
+		i++;
+		i++;
+		while (mem[i]) {
+			i--;
+			i--;
+			i--;
+			mem[i]++;
+			i++;
+			i++;
+			i++;
+			mem[i]--;
+		}
+		i--;
+		i--;
+		while (mem[i]) {
+			i--;
+			mem[i]++;
+			i++;
+			mem[i]--;
+		}
+		i++;
+		while (mem[i]) {
+			i--;
+			mem[i]++;
+			i++;
+			mem[i]--;
+		}
+		i--;
+		i--;
+		i--;
+		mem[i]--;
 	}
-	i++;
-	i++;
-	putchar(mem[i]);
-	i++;
-	mem[i]--;
-	mem[i]--;
-	mem[i]--;
-	putchar(mem[i]);
-	mem[i]++;
-	mem[i]++;
-	mem[i]++;
-	mem[i]++;
-	mem[i]++;
-	mem[i]++;
-	mem[i]++;
-	putchar(mem[i]);
-	putchar(mem[i]);
-	mem[i]++;
-	mem[i]++;
-	mem[i]++;
-	putchar(mem[i]);
-	i++;
-	i++;
-	putchar(mem[i]);
-	i--;
-	mem[i]--;
-	putchar(mem[i]);
-	i--;
-	putchar(mem[i]);
-	mem[i]++;
-	mem[i]++;
-	mem[i]++;
-	putchar(mem[i]);
-	mem[i]--;
-	mem[i]--;
-	mem[i]--;
-	mem[i]--;
-	mem[i]--;
-	mem[i]--;
-	putchar(mem[i]);
-	mem[i]--;
-	mem[i]--;
-	mem[i]--;
-	mem[i]--;
-	mem[i]--;
-	mem[i]--;
-	mem[i]--;
-	mem[i]--;
-	putchar(mem[i]);
-	i++;
-	i++;
-	mem[i]++;
-	putchar(mem[i]);
-	i++;
-	mem[i]++;
-	mem[i]++;
-	putchar(mem[i]);
 	/* Fim do código traduzido de BF */
 
 	printf("\n");
