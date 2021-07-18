@@ -101,19 +101,6 @@ void remove_extremes(char **msg) {
     *msg = new_msg;
 }
 
-bool is_palindrome(char **msg) {
-    int last_index = strlen(*msg) - 1;
-    
-    if (last_index < 1) {    
-        return true;
-    } else if ((*msg)[0] == (*msg)[last_index]) {
-        remove_extremes(msg);
-        return is_palindrome(msg);
-    } else {
-        return false;
-    }
-}
-
 void remove_spaces_and_bars(char **msg) {
     int msg_len = strlen(*msg);
     char *new_msg;
@@ -134,4 +121,17 @@ void remove_spaces_and_bars(char **msg) {
     free(*msg);
 
     *msg = new_msg;
+}
+
+bool is_palindrome(char **msg) {
+    int last_index = strlen(*msg) - 1;
+    
+    if (last_index < 1) {    
+        return true;
+    } else if ((*msg)[0] == (*msg)[last_index]) {
+        remove_extremes(msg);
+        return is_palindrome(msg);
+    } else {
+        return false;
+    }
 }
