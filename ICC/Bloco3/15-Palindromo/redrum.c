@@ -95,7 +95,7 @@ char *readline_clean(void) {
   return line;
 }
 
-// Change a string by reference,
+// Changes a string by reference,
 // removing its extremes
 void remove_extremes(char **msg) {
     int msg_len = strlen(*msg);
@@ -111,7 +111,7 @@ void remove_extremes(char **msg) {
     *msg = new_msg;
 }
 
-// Change a string by reference,
+// Changes a string by reference,
 // removing all ' ' and '/'
 void remove_spaces_and_slashes(char **msg) {
     int msg_len = strlen(*msg);
