@@ -8,33 +8,37 @@ char *create_string_copy(char *str);
 bool is_valid_char(char c);
 char *readline_clean(void);
 void remove_extremes(char **msg);
-void remove_spaces_and_bars(char **msg);
+void remove_spaces_and_slashes(char **msg);
 bool is_palindrome(char **msg);
 
 int main() {
     char *msg;
-    char *msg_without_spaces_and_bars;
+    char *msg_without_spaces_and_slashes;
     
     msg = readline_clean();   
     
-    msg_without_spaces_and_bars = create_string_copy(msg);
+    // We need to create a copy, because is_palindrome() and
+    // remove_spaces_and_slashes() functions changes the string
+    // by reference, irreversibly
+    msg_without_spaces_and_slashes = create_string_copy(msg);
     
-    remove_spaces_and_bars(&msg_without_spaces_and_bars);
+    remove_spaces_and_slashes(&msg_without_spaces_and_slashes);
 
     if (is_palindrome(&msg)) {
         printf("Palindromo direto\n");
-    } else if (is_palindrome(&msg_without_spaces_and_bars)) {
+    } else if (is_palindrome(&msg_without_spaces_and_slashes)) {
         printf("Palindromo indireto\n");
     } else {
         printf("Nao eh um palindromo\n");
     }
 
     free(msg);
-    free(msg_without_spaces_and_bars);
+    free(msg_without_spaces_and_slashes);
 
     return 0;
 }
 
+// Returns a copy of a string
 char *create_string_copy(char *str) {
     int str_len = strlen(str);
     char *new_str;
@@ -45,7 +49,9 @@ char *create_string_copy(char *str) {
 
     return new_str;
 }
- 
+
+// Checks if the char is a 'valid char', either:
+// alphanumeric, ' ', '/' or '\n'
 bool is_valid_char(char c) {
     bool is_valid_char;
     
@@ -61,6 +67,8 @@ bool is_valid_char(char c) {
     return is_valid_char;
 }
 
+// Reads line considering only the 'valid chars'
+// it also turns all uppercase chars to lowercase
 char *readline_clean(void) {
   char *line = NULL;
   char c;
@@ -87,6 +95,8 @@ char *readline_clean(void) {
   return line;
 }
 
+// Change a string by reference,
+// removing its extremes
 void remove_extremes(char **msg) {
     int msg_len = strlen(*msg);
     
@@ -101,7 +111,9 @@ void remove_extremes(char **msg) {
     *msg = new_msg;
 }
 
-void remove_spaces_and_bars(char **msg) {
+// Change a string by reference,
+// removing all ' ' and '/'
+void remove_spaces_and_slashes(char **msg) {
     int msg_len = strlen(*msg);
     char *new_msg;
 
@@ -123,6 +135,8 @@ void remove_spaces_and_bars(char **msg) {
     *msg = new_msg;
 }
 
+
+// Checks recursively whether a string is a palindrome
 bool is_palindrome(char **msg) {
     int last_index = strlen(*msg) - 1;
     
