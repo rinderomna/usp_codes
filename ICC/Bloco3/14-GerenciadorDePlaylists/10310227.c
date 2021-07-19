@@ -1,3 +1,6 @@
+// Helio Nogueira Cardoso
+// N°USP: 10310227
+
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
@@ -55,10 +58,9 @@ int main() {
       case RETROCEDER: retroceder(&minha_playlist); break;
       case SALVAR: salvar(&minha_playlist); break;
       case CARREGAR: carregar(&minha_playlist); break;
-      case EOF:
       case FINALIZAR: limpar(&minha_playlist); break;
     }
-  } while (comando != FINALIZAR && comando != EOF);
+  } while (comando != FINALIZAR);
   
   return 0;
 }
@@ -98,8 +100,8 @@ void adicionar(Playlist *playlist_) {
     nova_musica.artista = read_line();
     scanf("%d", &nova_musica.duracao);
 
-    // Buscando index da música atual, para que na realocação
-    // não corra o risco de perder a referência da música atual.
+    // Buscando index da musica atual, para que na realocacao
+    // nao corra o risco de perder a referencia da musica atual.
     int index_musica_atual;
 
     for (int i = 0; i < playlist_->n_musicas; i++) {
@@ -227,7 +229,8 @@ void carregar(Playlist *playlist_) {
   if (input_file == NULL) {
     printf("Arquivo %s nao existe.\n", nome_input_file);
     free(nome_input_file);
-    return;
+    limpar(playlist_);
+    exit(0);
   }
 
   limpar(playlist_);
@@ -266,11 +269,11 @@ void carregar(Playlist *playlist_) {
     fread(playlist_->musicas[i].artista, sizeof(char), tamanho_nome_artista, input_file);
     playlist_->musicas[i].artista[tamanho_nome_artista] = '\0';
 
-    // Duração da Música
+    // Duracao da Musica
     fread(&playlist_->musicas[i].duracao, sizeof(int), 1, input_file);
   }
 
-  // Reatribuição do Ponteiro de Música Atual
+  // Reatribuicao do Ponteiro de Musica Atual
   playlist_->musica_atual_ = &playlist_->musicas[0];
 
   printf("Playlist %s carregada com sucesso.\n", nome_input_file);
@@ -279,4 +282,3 @@ void carregar(Playlist *playlist_) {
   fclose(input_file);
   free(nome_input_file);
 }
-
