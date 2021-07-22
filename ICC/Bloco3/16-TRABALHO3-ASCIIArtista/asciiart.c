@@ -101,7 +101,7 @@ void load_art(art_t *art) {
   if (art_file == NULL) {
     printf("File '%s' does not exist.\n", art->path);
     free_art(art);
-    exit(0);
+    exit(EXIT_FAILURE);
   }
 
   art->matrix = NULL;
