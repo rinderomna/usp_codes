@@ -3,6 +3,7 @@
 #include <string.h>
 
 char *read_line(FILE *stream);
+char *str_concatenate(const char *str_1, const char *str_2);
 void enquadra_arte(
 	char *nome_do_art_file,
 	int  altura_do_quadro,
@@ -15,15 +16,12 @@ int main(void) {
   char *path_to_art;
 
   art_name = read_line(stdin);
-  path_to_art = (char *)malloc((strlen(art_name) + 7) * sizeof(char));
-
-  strcpy(path_to_art, "artes/");
-  path_to_art = strcat(path_to_art, art_name);  
+  path_to_art = str_concatenate("artes/", art_name);
 
   printf("%s\n", art_name);
   printf("%s\n", path_to_art);
 
-  //fopen(strcat("artes/", art_name), "r");
+  fopen(path_to_art, "r");
 
   free(art_name);
   free(path_to_art);
@@ -50,6 +48,18 @@ char *read_line(FILE *stream) {
   } while (c != '\n' && c != EOF);
 
   return line;
+}
+
+char *str_concatenate(const char *str_1, const char *str_2) {
+  char *str_final = NULL;
+  int final_len = strlen(str_1) + strlen(str_2);
+
+  str_final = (char *)malloc((final_len + 1) * sizeof(char));
+
+  strcpy(str_final, str_1);
+  str_final = strcat(str_final, str_2);
+
+  return str_final;
 }
 
 void enquadra_arte(
