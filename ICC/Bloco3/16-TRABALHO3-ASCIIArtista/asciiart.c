@@ -1,42 +1,41 @@
+// Helio Nogueira Cardoso
+// N°USP: 10310227
+
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
 #include <stdbool.h>
 
+typedef struct art_ {
+  char *name;
+  char *path;
+  char **matrix;
+  int height;
+  int width;
+} art_t;
+
+typedef struct pixel_ {
+  int x;
+  int y;
+} pixel_t;
+
 char *read_line(FILE *stream, bool *has_EOF);
+void free_art(art_t *art);
 char *str_concatenate(const char *str_1, const char *str_2);
-void enquadra_arte(
-	char *nome_do_art_file,
-	int  altura_do_quadro,
-	int  largura_do_quadro
+void load_art(art_t *art);
+void print_art(art_t art);
+void enquadra_arte(char *nome_do_art_file,
+	int altura_do_quadro,
+	int largura_do_quadro
 );
 
 int main(void) {
   FILE *art_file = NULL;
-  bool has_EOF = false;
-  char *art_name;
-  char *path_to_art;
-
-  art_name = read_line(stdin, &has_EOF);
-  path_to_art = str_concatenate("artes/", art_name);
-
-  printf("%s\n", art_name);
-  printf("%s\n", path_to_art);
-
-  //art_file = fopen(path_to_art, "r");
-
-  // Inicio do codigo
-
-  char **art_matrix;
-
-
-
-  // Final do codigo
-
-  //fclose(art_file);
-
-  free(art_name);
-  free(path_to_art);
+  art_t art;
+  
+  load_art(&art);
+  print_art(art);
+  free_art(&art);
 
   return 0;
 }
@@ -68,6 +67,16 @@ char *read_line(FILE *stream, bool *has_EOF) {
   return line;
 }
 
+void free_art(art_t *art) {
+  free(art->name);
+  free(art->path);
+
+  for (int i = 0; i < art->height; i++) {
+    free(art->matrix[i]);
+  }
+  free(art->matrix);
+}
+
 char *str_concatenate(const char *str_1, const char *str_2) {
   char *str_final = NULL;
   int final_len = strlen(str_1) + strlen(str_2);
@@ -79,6 +88,43 @@ char *str_concatenate(const char *str_1, const char *str_2) {
 
   return str_final;
 }
+
+void load_art(art_t *art) {
+  FILE *art_file;
+  bool has_EOF = false;
+
+  art->name = read_line(stdin, &has_EOF);
+  art->path = str_concatenate("artes/", art->name);
+
+  art_file = fopen(art->path, "r");
+
+  if (art_file == NULL) {
+    printf("File '%s' does not exist.\n", art->path);
+    free_art(art);
+    exit(0);
+  }
+
+  art->matrix = NULL;
+  art->height = 0;
+
+  do {
+    int cur_index = art->height;
+    art->matrix = (char **) realloc(art->matrix, ++art->height * sizeof(char *));
+    
+    art->matrix[cur_index] = read_line(art_file, &has_EOF);
+  } while (!has_EOF);
+
+  art->width = strlen(art->matrix[0]);
+
+  fclose(art_file);
+}
+
+void print_art(art_t art) {
+  for (int i = 0; i < art.height; i++) {
+    printf("%s\n", art.matrix[i]);
+  }
+}
+
 
 void enquadra_arte(
 	char *nome_do_art_file,
