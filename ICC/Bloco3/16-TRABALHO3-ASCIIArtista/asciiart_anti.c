@@ -148,9 +148,9 @@ void print_art(art_t art) {
 bool is_out_of_bounds(art_t art, pixel_t pixel) {
   bool is_out_of_bounds;
   
-  if (pixel.x < 0 || pixel.x >= art.width) {
+  if (pixel.x < 0 || pixel.x >= art.height) {
     is_out_of_bounds = true;
-  } else if (pixel.y < 0 || pixel.y >= art.height) {
+  } else if (pixel.y < 0 || pixel.y >= art.width) {
     is_out_of_bounds = true;  
   } else {
     is_out_of_bounds = false;
@@ -160,27 +160,27 @@ bool is_out_of_bounds(art_t art, pixel_t pixel) {
 }
 
 void paint_art_recursively(art_t *art, pixel_t pixel, char color, char which_to_paint) {
-  if (art->matrix[pixel.y][pixel.x] == which_to_paint) {
-    art->matrix[pixel.y][pixel.x] = color;
+  if (art->matrix[pixel.x][pixel.y] == which_to_paint) {
+    art->matrix[pixel.x][pixel.y] = color;
   } else {
     return;
   }
 
   pixel_t pixel_up;
-  pixel_up.x = pixel.x;
-  pixel_up.y = pixel.y - 1;
+  pixel_up.x = pixel.x - 1;
+  pixel_up.y = pixel.y;
 
   pixel_t pixel_down;
-  pixel_down.x = pixel.x;
-  pixel_down.y = pixel.y + 1;
+  pixel_down.x = pixel.x + 1;
+  pixel_down.y = pixel.y;
 
   pixel_t pixel_left;
-  pixel_left.x = pixel.x - 1;
-  pixel_left.y = pixel.y;
+  pixel_left.x = pixel.x;
+  pixel_left.y = pixel.y - 1;
 
   pixel_t pixel_right;
-  pixel_right.x = pixel.x + 1;
-  pixel_right.y = pixel.y;
+  pixel_right.x = pixel.x;
+  pixel_right.y = pixel.y + 1;
 
   if(!is_out_of_bounds(*art, pixel_up)) {
     paint_art_recursively(art, pixel_up, color, which_to_paint);
@@ -200,7 +200,7 @@ void paint_art_recursively(art_t *art, pixel_t pixel, char color, char which_to_
 }
 
 void paint_art(art_t *art, pixel_t pixel, char color) {
-  char which_to_paint = art->matrix[pixel.y][pixel.x];
+  char which_to_paint = art->matrix[pixel.x][pixel.y];
 
   paint_art_recursively(art, pixel, color, which_to_paint);
 }
