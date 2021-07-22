@@ -31,7 +31,7 @@ int main() {
     } else {
         printf("Nao eh um palindromo\n");
     }
-
+    
     free(msg);
     free(msg_without_spaces_and_slashes);
 
