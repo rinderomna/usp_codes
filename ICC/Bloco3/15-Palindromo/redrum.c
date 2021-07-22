@@ -53,18 +53,7 @@ char *create_string_copy(char *str) {
 // Checks if the char is a 'valid char', either:
 // alphanumeric, ' ', '/' or '\n'
 bool is_valid_char(char c) {
-    bool is_valid_char;
-    
-    if (isalnum(c)) 
-        is_valid_char = true;
-    else if (c == ' ' || c == '/')
-        is_valid_char = true;
-    else if (c == '\n')
-        is_valid_char = true;
-    else 
-        is_valid_char = false;
-
-    return is_valid_char;
+    return (isalnum(c) || c == ' ' || c == '/' || c == '\n');
 }
 
 // Reads line considering only the 'valid chars'
