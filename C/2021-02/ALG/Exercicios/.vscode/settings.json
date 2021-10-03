@@ -1,0 +1,10 @@
+{
+    "files.associations": {
+        "linked_list.h": "c",
+        "generic_linked_list.h": "c",
+        "stdio.h": "c",
+        "stdlib.h": "c",
+        "priority_queue.h": "c",
+        "string.h": "c"
+    }
+}

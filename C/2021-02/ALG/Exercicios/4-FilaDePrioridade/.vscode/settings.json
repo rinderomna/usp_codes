@@ -1,0 +1,12 @@
+{
+    "files.associations": {
+        "stdlib.h": "c",
+        "stdio.h": "c",
+        "fila_de_prioridade.h": "c",
+        "lista_encadeada.h": "c",
+        "generic_linked_list.h": "c",
+        "fila_prioridade.h": "c",
+        "priority_queue.h": "c",
+        "string.h": "c"
+    }
+}
