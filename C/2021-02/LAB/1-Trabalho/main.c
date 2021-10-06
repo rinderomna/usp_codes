@@ -1,8 +1,8 @@
 /* ________________________________________________________________________
- *|     SCC0220 - Laboratório de Introdução à Ciência da Computação II     |
+ *|     SCC0220 - Laboratorio de Introducao a Ciencia da Computacao II     |
  *|                      [Segundo Semestre de 2021]                        |
  *|                                                                        |
- *|---------------| Exercicio 01: Ordenação Aconchegante |-----------------|
+ *|---------------| Exercicio 01: Ordenacao Aconchegante |-----------------|
  *|                                                                        |
  *|         Codigo por: Helio Nogueira Cardoso - N°USP: 10310227           |
  *|________________________________________________________________________|
@@ -37,7 +37,7 @@ void print_shell_list(shell_list_t *shell_list);
 void insertion_sort_shells(shell_list_t *shell_list, int first_index, int step);
 
 /* |shell_sort|
- * Sort the specified shell list recursively, using the control parameter n, in a
+ * Sorts the specified shell list recursively, using the control parameter n, in a
  * way that the original list is divided in n / 2 (integer division) virtual sub-
  * lists. An element at position k belongs to the same sublist as other elements 
  * whose indexes i are such that (i % (n / 2)) == (k % (n / 2)). At each step, the
