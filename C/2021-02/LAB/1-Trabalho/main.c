@@ -71,9 +71,7 @@ void print_shell_list(shell_list_t *shell_list) {
         printf("%.3lf ", shell_list->shells[i].diameter);
         print_string(shell_list->shells[i].colour);
         printf(" ");
-        print_string(shell_list->shells[i].texture);
-
-        new_line();
+        println_string(shell_list->shells[i].texture);
     }
 }
 
@@ -115,8 +113,8 @@ void read_shell_list(shell_list_t *shell_list) {
 
     for (int i = 0; i < shell_list->n_shells; i++) {
         scanf(" %lf", &shell_list->shells[i].diameter);
-        shell_list->shells[i].colour = read_string(stdin, ' ');
-        shell_list->shells[i].texture = read_string(stdin, ' ');
+        shell_list->shells[i].colour = read_until(stdin, ' ');
+        shell_list->shells[i].texture = read_until(stdin, ' ');
     }
 }
 

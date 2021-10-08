@@ -56,7 +56,7 @@ void *copy_memory(void *dest, void *src, size_t n_bytes) {
 	return dest;
 }
 
-string_t read_string(FILE *stream, symbol_t separator) {
+string_t read_until(FILE *stream, symbol_t separator) {
     string_t line = NULL;
     symbol_t c;
     unsigned long int n_chars = 0;
