@@ -31,7 +31,7 @@ typedef struct shell_list {
 void print_shell_list(shell_list_t *shell_list);
 
 /* |insertion_sort_shells|
- * Sort a sub list of the shell_list in-place, beginning at first_index such that
+ * Sorts a sublist of the shell_list in-place, beginning at first_index such that
  * each next element is one step forward in the original list.
  */
 void insertion_sort_shells(shell_list_t *shell_list, int first_index, int step);
@@ -79,21 +79,21 @@ void print_shell_list(shell_list_t *shell_list) {
 
 void insertion_sort_shells(shell_list_t *shell_list, int first_index, int step) {
     int N = shell_list->n_shells;
-	int i = first_index + step;
+    int i = first_index + step;
 
-	while (i < N) {		
-		shell_t key = shell_list->shells[i]; 
-		int j = i - step; 
+    while (i < N) {
+        shell_t key = shell_list->shells[i];
+        int j = i - step;
 
-		while (j >= first_index && key.diameter < shell_list->shells[j].diameter) {
-			shell_list->shells[j + step] = shell_list->shells[j];
-			j -= step; 
-		}
+        while (j >= first_index && key.diameter < shell_list->shells[j].diameter) {
+            shell_list->shells[j + step] = shell_list->shells[j];
+            j -= step;
+        }
 
-		shell_list->shells[j + step] = key;
+        shell_list->shells[j + step] = key;
 
-		i += step;
-	}
+        i += step;
+    }
 }
 
 void shell_sort(shell_list_t *shell_list, int n) {
@@ -117,7 +117,7 @@ void read_shell_list(shell_list_t *shell_list) {
         scanf(" %lf", &shell_list->shells[i].diameter);
         shell_list->shells[i].colour = read_string(stdin, ' ');
         shell_list->shells[i].texture = read_string(stdin, ' ');
-    }    
+    }
 }
 
 void free_shell_list(shell_list_t *shell_list) {
