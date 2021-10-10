@@ -1,6 +1,5 @@
 #include <stdio.h>
 #include <stdlib.h>
-#include <assert.h>
 
 #include "pilha.h"
 
@@ -11,7 +10,6 @@ struct pilha {
 
 pilha_t *criar_pilha() {
   pilha_t *p = (pilha_t *) malloc(sizeof(pilha_t));
-  assert(p != NULL);
 
   p->topo = -1;
   p->itens = NULL;
@@ -24,7 +22,6 @@ int get_tamanho_da_pilha(pilha_t *p) {
 }
 
 int isFull(pilha_t *p) {
-  assert(p != NULL);
 
   if (p->topo == TamPilha - 1)
     return 1;
@@ -34,7 +31,6 @@ int isFull(pilha_t *p) {
 }
 
 int isEmpty(pilha_t *p) {
-  assert(p != NULL);
   if (p->topo == -1) {
     return 1;
   } else
@@ -42,7 +38,6 @@ int isEmpty(pilha_t *p) {
 }
 
 int push(pilha_t *p, elem_t x) {
-  assert(p != NULL);
 
   if (isFull(p) == 1) {
     return -1;
@@ -61,7 +56,6 @@ int push(pilha_t *p, elem_t x) {
 }
 
 int pop(pilha_t *p, elem_t *x) {
-  assert(p != NULL);
 
   if (isEmpty(p) == 1) {
     return -1;
@@ -80,7 +74,6 @@ int pop(pilha_t *p, elem_t *x) {
 }
 
 int top(pilha_t *p, elem_t *x) {
-  assert(p != NULL);
 
   if (isEmpty(p) == 1) {
     return -1;

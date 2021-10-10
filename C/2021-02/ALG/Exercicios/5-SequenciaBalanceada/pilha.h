@@ -1,4 +1,4 @@
-#define TamPilha 400
+#define TamPilha 10000
 
 #define FAIL -1
 

@@ -20,7 +20,7 @@ typedef int bool_t;
 typedef enum tipo_delimitador {
     ABERTURA,
     FECHAMENTO,
-    ASPAS,
+    SIMETRICO,
     OUTRO
 } tipo_delimitador_t;
 
@@ -64,7 +64,7 @@ int main() {
                     balanceado = FALSE;
                     scanf("%*[^\r\n]s");  // Ignora ate o final da linha
                 }
-            } else if (tipo_do_delimitador == ASPAS) {
+            } else if (tipo_do_delimitador == SIMETRICO) {
                 elem_t ultimo_delimitador = ' ';
                 int status_da_consulta = top(pilha_de_delimitadores, &ultimo_delimitador);
 
@@ -94,7 +94,7 @@ tipo_delimitador_t tipo_de_delimitador(char delimitador) {
         delimitador == '}') {
         return FECHAMENTO;
     } else if (delimitador == '"') {
-        return ASPAS;
+        return SIMETRICO;
     } else {
         return OUTRO;
     }
