@@ -7,8 +7,9 @@
  *| Codigo por: Helio Nogueira Cardoso - N°USP: 10310227 |
  *|______________________________________________________|
  */
- 
+
 #include <stdio.h>
+#include <stdlib.h>
 
 #include "pilha.h"
 
@@ -31,14 +32,14 @@ int main() {
     char delimitador = 0;
 
     bool_t balanceado = TRUE;
-    
+
     do {
         delimitador = getchar();
 
         if (delimitador == '\n' || delimitador == EOF) {
             if (balanceado && get_tamanho_da_pilha(pilha_de_delimitadores) == 0) {
                 printf("BALANCEADO");
-            } else {   
+            } else {
                 printf("NÃO BALANCEADO");
                 balanceado = TRUE;
             }
@@ -55,14 +56,13 @@ int main() {
                 push(pilha_de_delimitadores, delimitador);
             } else if (tipo_do_delimitador == FECHAMENTO) {
                 elem_t ultimo_delimitador = ' ';
-                int status_da_retirada = pop(pilha_de_delimitadores, &ultimo_delimitador);   
+                int status_da_retirada = pop(pilha_de_delimitadores, &ultimo_delimitador);
                 if (status_da_retirada == FAIL ||
                     (ultimo_delimitador != '[' || delimitador != ']') &&
-                    (ultimo_delimitador != '(' || delimitador != ')') &&
-                    (ultimo_delimitador != '{' || delimitador != '}')
-                ) {
+                        (ultimo_delimitador != '(' || delimitador != ')') &&
+                        (ultimo_delimitador != '{' || delimitador != '}')) {
                     balanceado = FALSE;
-                    scanf("%*[^\r\n]s"); // Ignora ate o final da linha
+                    scanf("%*[^\r\n]s");  // Ignora ate o final da linha
                 }
             } else if (tipo_do_delimitador == ASPAS) {
                 elem_t ultimo_delimitador = ' ';
@@ -86,14 +86,12 @@ tipo_delimitador_t tipo_de_delimitador(char delimitador) {
     if (
         delimitador == '[' ||
         delimitador == '(' ||
-        delimitador == '{'
-    ) {
+        delimitador == '{') {
         return ABERTURA;
     } else if (
         delimitador == ']' ||
         delimitador == ')' ||
-        delimitador == '}'
-    ) {
+        delimitador == '}') {
         return FECHAMENTO;
     } else if (delimitador == '"') {
         return ASPAS;
