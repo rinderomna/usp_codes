@@ -12,21 +12,25 @@
 
 #include "pilha.h"
 
-enum {
+#define FALSE 0
+#define TRUE 1
+typedef int bool_t;
+
+typedef enum tipo_delimitador {
     ABERTURA,
     FECHAMENTO,
     ASPAS,
     OUTRO
-};
+} tipo_delimitador_t;
 
-int tipo_de_delimitador(char delimitador);
+tipo_delimitador_t tipo_de_delimitador(char delimitador);
 
 int main() {
     pilha_t *pilha_de_delimitadores = criar_pilha();
 
     char delimitador = 0;
 
-    int balanceado = 1;
+    bool_t balanceado = TRUE;
     
     do {
         delimitador = getchar();
@@ -36,7 +40,7 @@ int main() {
                 printf("BALANCEADO");
             } else {   
                 printf("NÃO BALANCEADO");
-                balanceado = 1;
+                balanceado = TRUE;
             }
 
             if (delimitador != EOF) {
@@ -57,11 +61,11 @@ int main() {
                     (ultimo_delimitador != '(' || delimitador != ')') &&
                     (ultimo_delimitador != '{' || delimitador != '}')
                 ) {
-                    balanceado = 0;
+                    balanceado = FALSE;
                     scanf("%*[^\r\n]s"); // Ignora ate o final da linha
                 }
             } else if (tipo_do_delimitador == ASPAS) {
-                char ultimo_delimitador = ' ';
+                elem_t ultimo_delimitador = ' ';
                 int status_da_consulta = top(pilha_de_delimitadores, &ultimo_delimitador);
 
                 if (status_da_consulta == FAIL || ultimo_delimitador != delimitador) {
@@ -75,10 +79,10 @@ int main() {
 
     destruir_pilha(&pilha_de_delimitadores);
 
-    return 0;
+    return EXIT_SUCCESS;
 }
 
-int tipo_de_delimitador(char delimitador) {
+tipo_delimitador_t tipo_de_delimitador(char delimitador) {
     if (
         delimitador == '[' ||
         delimitador == '(' ||
