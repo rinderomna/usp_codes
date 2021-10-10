@@ -31,7 +31,7 @@ int main() {
     do {
         delimitador = getchar();
 
-        if (delimitador == '\n' || delimitador == EOF) {
+        if (delimitador == '\r' || delimitador == '\n' || delimitador == EOF) {
             if (balanceado && get_tamanho_da_pilha(pilha_de_delimitadores) == 0) {
                 printf("BALANCEADO");
             } else {   
@@ -50,23 +50,23 @@ int main() {
             if (tipo_da_delimitador == ABERTURA) {
                 push(pilha_de_delimitadores, delimitador);
             } else if (tipo_da_delimitador == FECHAMENTO) {
-                elem_t ultima_delimitador = ' ';
-                int status_da_retirada = pop(pilha_de_delimitadores, &ultima_delimitador);   
+                elem_t ultimo_delimitador = ' ';
+                int status_da_retirada = pop(pilha_de_delimitadores, &ultimo_delimitador);   
                 if (status_da_retirada == FAIL ||
-                    (ultima_delimitador != '[' || delimitador != ']') &&
-                    (ultima_delimitador != '(' || delimitador != ')') &&
-                    (ultima_delimitador != '{' || delimitador != '}')
+                    (ultimo_delimitador != '[' || delimitador != ']') &&
+                    (ultimo_delimitador != '(' || delimitador != ')') &&
+                    (ultimo_delimitador != '{' || delimitador != '}')
                 ) {
                     balanceado = 0;
                 }
             } else if (tipo_da_delimitador == ASPAS) {
-                char ultima_delimitador = ' ';
-                int status_da_consulta = top(pilha_de_delimitadores, &ultima_delimitador);
+                char ultimo_delimitador = ' ';
+                int status_da_consulta = top(pilha_de_delimitadores, &ultimo_delimitador);
 
-                if (status_da_consulta == FAIL || ultima_delimitador != delimitador) {
+                if (status_da_consulta == FAIL || ultimo_delimitador != delimitador) {
                     push(pilha_de_delimitadores, delimitador);
                 } else {
-                    pop(pilha_de_delimitadores, &ultima_delimitador);
+                    pop(pilha_de_delimitadores, &ultimo_delimitador);
                 }
             }
         }
