@@ -31,7 +31,7 @@ int main() {
     do {
         delimitador = getchar();
 
-        if (delimitador == '\r' || delimitador == '\n' || delimitador == EOF) {
+        if (delimitador == '\n' || delimitador == EOF) {
             if (balanceado && get_tamanho_da_pilha(pilha_de_delimitadores) == 0) {
                 printf("BALANCEADO");
             } else {   
@@ -45,11 +45,11 @@ int main() {
 
             esvaziar_pilha(pilha_de_delimitadores);
         } else if (delimitador != ' ') {
-            int tipo_da_delimitador = tipo_de_delimitador(delimitador);
+            int tipo_do_delimitador = tipo_de_delimitador(delimitador);
 
-            if (tipo_da_delimitador == ABERTURA) {
+            if (tipo_do_delimitador == ABERTURA) {
                 push(pilha_de_delimitadores, delimitador);
-            } else if (tipo_da_delimitador == FECHAMENTO) {
+            } else if (tipo_do_delimitador == FECHAMENTO) {
                 elem_t ultimo_delimitador = ' ';
                 int status_da_retirada = pop(pilha_de_delimitadores, &ultimo_delimitador);   
                 if (status_da_retirada == FAIL ||
@@ -58,9 +58,9 @@ int main() {
                     (ultimo_delimitador != '{' || delimitador != '}')
                 ) {
                     balanceado = 0;
-                    scanf("%*[^\r\n]s"); // Ignora até o final da linha
+                    scanf("%*[^\r\n]s"); // Ignora ate o final da linha
                 }
-            } else if (tipo_da_delimitador == ASPAS) {
+            } else if (tipo_do_delimitador == ASPAS) {
                 char ultimo_delimitador = ' ';
                 int status_da_consulta = top(pilha_de_delimitadores, &ultimo_delimitador);
 
