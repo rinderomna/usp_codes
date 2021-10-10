@@ -58,6 +58,7 @@ int main() {
                     (ultimo_delimitador != '{' || delimitador != '}')
                 ) {
                     balanceado = 0;
+                    scanf("%*[^\r\n]s"); // Ignora até o final da linha
                 }
             } else if (tipo_da_delimitador == ASPAS) {
                 char ultimo_delimitador = ' ';
