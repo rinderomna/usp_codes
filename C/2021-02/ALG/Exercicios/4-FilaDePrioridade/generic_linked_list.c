@@ -1,8 +1,7 @@
+#include "generic_linked_list.h"
+
 #include <stdio.h>
 #include <stdlib.h>
-#include <string.h>
-
-#include "generic_linked_list.h"
 
 struct node {
     void *elem;
@@ -15,6 +14,17 @@ struct list {
     int size;
     int elem_size;
 };
+
+void *copy_memory(void *dest, void *src, size_t n_bytes) {
+    char *d = dest;
+    char *s = src;
+
+    for (int i = 0; i < n_bytes; i++) {
+        d[i] = s[i];
+    }
+
+    return dest;
+}
 
 list_t *create_list(int elem_size) {
     list_t *l = (list_t *)malloc(sizeof(list_t));
@@ -37,7 +47,7 @@ void append_to_list(list_t *l, void *elem) {
     node_t *p = (node_t *)malloc(sizeof(node_t));
 
     p->elem = malloc(l->elem_size);
-    memcpy(p->elem, elem, l->elem_size);
+    copy_memory(p->elem, elem, l->elem_size);
 
     p->next = NULL;
     if (l->size == 0) {
@@ -56,7 +66,7 @@ void insert_in_list(list_t *l, void *elem, int index) {
     node_t *p = (node_t *)malloc(sizeof(node_t));
 
     p->elem = malloc(l->elem_size);
-    memcpy(p->elem, elem, l->elem_size);
+    copy_memory(p->elem, elem, l->elem_size);
     p->next = NULL;
 
     node_t *prev_node_pointer = NULL;
@@ -91,7 +101,7 @@ void access_element(list_t *l, int index, void *elem) {
         curr_node_pointer = curr_node_pointer->next;
     }
 
-    memcpy(elem, curr_node_pointer->elem, l->elem_size);
+    copy_memory(elem, curr_node_pointer->elem, l->elem_size);
 }
 
 void remove_from_list(list_t *l, int index) {

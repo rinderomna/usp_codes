@@ -16,7 +16,7 @@ struct p_queue {
 };
 
 p_queue_t *create_priority_queue(int datum_size) {
-    p_queue_t *q = malloc(sizeof(p_queue_t));
+    p_queue_t *q = (p_queue_t *)malloc(sizeof(p_queue_t));
 
     q->l = create_list((int)sizeof(elem_t));
 

@@ -1,10 +1,12 @@
 // pilha.h
 
 // Definção de constante TamPilha que indica o tamanho máximo da pilha
-#define TamPilha 400
+#define TamPilha 100000
+
+#define FAIL -1
 
 // Definição do tipo elem (int)
-typedef char elem_t;
+typedef int elem_t;
 
 // Definição do tipo pilha_t (struct pilha)
 typedef struct pilha pilha_t;
@@ -25,6 +27,8 @@ pilha_t *create();
  * @param p (pilha_t **): ponteiro para ponteiro da pilha
  */
 void destroy(pilha_t **p);
+
+int get_stack_size(pilha_t *p);
 
 /* |isFull|
  * Recebe ponteiro para a pilha, a qual será testada.

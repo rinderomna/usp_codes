@@ -1,6 +1,7 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include "str.h"
+#define BUFFER_SIZE 50
 
 size_t string_length(string_t str) {
     size_t len = 0;
@@ -56,11 +57,11 @@ void *copy_memory(void *dest, void *src, size_t n_bytes) {
 	return dest;
 }
 
-string_t read_string(FILE *stream, symbol_t separator) {
-    string_t line = NULL;
+string_t read_until(FILE *stream, symbol_t separator) {
     symbol_t c;
     unsigned long int n_chars = 0;
-
+    string_t line = (string_t)realloc(line, BUFFER_SIZE * sizeof(symbol_t));
+    
     while ((c = fgetc(stream)) == '\n' || (c == '\r') || (c == separator));
 
     if (c != EOF) ungetc(c, stream);
