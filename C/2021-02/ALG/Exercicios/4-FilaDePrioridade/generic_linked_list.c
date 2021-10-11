@@ -1,7 +1,7 @@
-#include "generic_linked_list.h"
-
 #include <stdio.h>
 #include <stdlib.h>
+
+#include "generic_linked_list.h"
 
 struct node {
     void *elem;
@@ -16,10 +16,10 @@ struct list {
 };
 
 void *copy_memory(void *dest, void *src, size_t n_bytes) {
-    char *d = dest;
-    char *s = src;
+    char *d = (char *)dest;
+    char *s = (char *)src;
 
-    for (int i = 0; i < n_bytes; i++) {
+    for (int i = 0; i < (int)n_bytes; i++) {
         d[i] = s[i];
     }
 
@@ -159,7 +159,6 @@ void right_rotate_list(list_t *l, int n) {
 
     for (int i = 0; i < n; i++) {
         access_element(l, last_index, datum);
-
         remove_from_list(l, last_index);
         insert_in_list(l, datum, 0);
     }
@@ -169,6 +168,7 @@ void right_rotate_list(list_t *l, int n) {
 
 void destroy_list(list_t **l) {
     node_t *p = (*l)->start;
+    
     while (p) {
         (*l)->start = (*l)->start->next;
         free(p->elem);

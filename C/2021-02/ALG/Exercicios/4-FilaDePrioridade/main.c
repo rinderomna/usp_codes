@@ -14,12 +14,12 @@
 
 #include "priority_queue.h"
 
-typedef int bool;
+typedef int bool_t;
 
 typedef struct person {
     char name[100];
     int age;
-    bool has_health_condition;
+    bool_t has_health_condition;
 } person_t;
 
 /* |read_person|
