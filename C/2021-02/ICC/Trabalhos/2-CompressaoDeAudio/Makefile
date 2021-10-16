@@ -1,6 +1,6 @@
 objects = *.c
 
 all: $(objects)
-	gcc -g $(objects) -o bin
+	gcc $(objects) -g -o bin -lm
 run:
 	./bin

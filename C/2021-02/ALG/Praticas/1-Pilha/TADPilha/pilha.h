@@ -1,8 +1,7 @@
-// pilha.h
-
-// Definção de constante TamPilha que indica o tamanho máximo da pilha
+// Definição de constante TamPilha que indica o tamanho máximo da pilha
 #define TamPilha 100000
 
+// Flag que indica falha na execução da função
 #define FAIL -1
 
 // Definição do tipo elem (int)
@@ -28,6 +27,12 @@ pilha_t *create();
  */
 void destroy(pilha_t **p);
 
+/* |get_stack_size|
+ * Retorna o tamanho da pilha especificada.
+ *
+ * @param p (pilha_t *): ponteiro para a pilha cujo tamanho será consultado
+ * @return (int): inteiro que indica o número de elementos na pulha
+ */
 int get_stack_size(pilha_t *p);
 
 /* |isFull|

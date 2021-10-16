@@ -1,10 +1,8 @@
-// pilha.c
-
-#include "pilha.h"
-
 #include <assert.h>
 #include <stdio.h>
 #include <stdlib.h>
+
+#include "pilha.h"
 
 #define BUFFER_SIZE 50
 
@@ -18,7 +16,7 @@ pilha_t *create() {
     assert(p != NULL);
 
     p->topo = -1;
-    p->itens = (elem_t *)malloc(BUFFER_SIZE * sizeof(elem_t));
+    p->itens = NULL;
 
     return p;
 }
@@ -67,16 +65,12 @@ int push(pilha_t *p, elem_t x) {
     int stack_size = get_stack_size(p);
 
     if (stack_size % BUFFER_SIZE == 0) {
-        int new_size = ((stack_size / BUFFER_SIZE) + 1) * BUFFER_SIZE;
+        int new_size = (stack_size / BUFFER_SIZE + 1) * BUFFER_SIZE;
 
-        p->itens = (elem_t *)realloc(
-            p->itens,
-            (new_size) * sizeof(elem_t));
+        p->itens = (elem_t *)realloc(p->itens, new_size * sizeof(elem_t));
     }
 
-    p->topo++;
-
-    p->itens[p->topo] = x;
+    p->itens[++p->topo] = x;
 
     return 1;
 }

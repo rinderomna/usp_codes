@@ -10,14 +10,14 @@
 
 #include <stdio.h>
 #include <stdlib.h>
-#include <string.h>
 
 #include "priority_queue.h"
+#include "str.h"
 
 typedef int bool_t;
 
 typedef struct person {
-    char name[100];
+    symbol_t name[100];
     int age;
     bool_t has_health_condition;
 } person_t;
@@ -46,29 +46,30 @@ void add_person_to_priority_queue(p_queue_t *q, person_t *person);
 int main() {
     p_queue_t *q = create_priority_queue(sizeof(person_t));
 
-    int n_commands;
-    char command[6];
+    int n_commands = 0;
 
     scanf(" %d", &n_commands);
-
+    
     for (int i = 0; i < n_commands; i++) {
-        scanf(" %s", command);
+        string_t command = read_until(stdin, ' ');
 
         person_t person;
 
-        if (strcmp(command, "ENTRA") == 0) {
+        if (compare_strings(command, "ENTRA") == 0) {
             read_person(&person);
             add_person_to_priority_queue(q, &person);
-        } else if (strcmp(command, "SAI") == 0) {
+        } else if (compare_strings(command, "SAI") == 0) {
             if (get_priority_queue_size(q) == 0) {
                 printf("FILA VAZIA");
-                if (i < n_commands - 1) printf("\n");
+                if (i < n_commands - 1) new_line();
             } else {
                 remove_from_priority_queue(q, &person);
                 print_person(&person);
-                if (i < n_commands - 1) printf("\n");
+                if (i < n_commands - 1) new_line();
             }
         }
+
+        destroy_string(command);
     }
 
     destroy_priority_queue(&q);

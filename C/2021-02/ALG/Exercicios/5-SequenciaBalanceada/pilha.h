@@ -1,4 +1,4 @@
-#define TamPilha 10000
+#define TamPilhaMax 10000
 
 #define FAIL -1
 
@@ -22,7 +22,7 @@ pilha_t *criar_pilha();
  */
 int get_tamanho_da_pilha(pilha_t *p);
 
-/* |isFull|
+/* |estaVazia|
  * Recebe ponteiro para a pilha, a qual será testada.
  * Se estiver cheia (número de elementos é o máximo estipulado),
  * retornará 1 (true). Caso contrário, retonará 0 (false).
@@ -30,9 +30,9 @@ int get_tamanho_da_pilha(pilha_t *p);
  * @param p (pilha_t *): ponteiro para a pilha
  * @return (int): inteiro tipo booleano que indica se pilha está cheia
  */
-int isFull(pilha_t *p);
+int estaVazia(pilha_t *p);
 
-/* |isEmpty|
+/* |estaVazia|
  * Recebe ponteiro para a pilha, a qual será testada.
  * Se estiver vazia (número de elementos é zero),
  * retornará 1 (true). Caso contrário, retonará 0 (false).
@@ -40,7 +40,7 @@ int isFull(pilha_t *p);
  * @param p (pilha_t *): ponteiro para a pilha
  * @return (int): inteiro tipo booleano que indica se pilha está vazia
  */
-int isEmpty(pilha_t *p);
+int estaVazia(pilha_t *p);
 
 /* |push|
  * Adiciona elemento ao topo da pilha

@@ -1,9 +1,9 @@
 #include <stdio.h>
 #include <stdlib.h>
-#include <string.h>
 
 #include "generic_linked_list.h"
 #include "priority_queue.h"
+#include "str.h"
 
 struct elem {
     void *datum;
@@ -34,7 +34,7 @@ void add_to_priority_queue(p_queue_t *q, void *datum, int priority) {
 
     elem.priority = priority;
     elem.datum = malloc(q->datum_size);
-    memcpy(elem.datum, datum, q->datum_size);
+    copy_memory(elem.datum, datum, q->datum_size);
 
     int i = get_list_size(q->l);
 
@@ -43,10 +43,12 @@ void add_to_priority_queue(p_queue_t *q, void *datum, int priority) {
 
     do {
         i--;
+        
         if (i >= 0) {
             access_element(q->l, i, (void *)&cur_elem);
         }
     } while (priority < cur_elem.priority && i >= 0);
+
     i++;
 
     insert_in_list(q->l, (void *)&elem, i);
@@ -55,12 +57,10 @@ void add_to_priority_queue(p_queue_t *q, void *datum, int priority) {
 void remove_from_priority_queue(p_queue_t *q, void *datum) {
     if (get_list_size(q->l) > 0) {
         elem_t elem;
+
         access_element(q->l, 0, (void *)&elem);
-
-        memcpy(datum, elem.datum, q->datum_size);
-
+        copy_memory(datum, elem.datum, q->datum_size);
         free(elem.datum);
-
         remove_from_list(q->l, 0);
     }
 }
@@ -68,13 +68,14 @@ void remove_from_priority_queue(p_queue_t *q, void *datum) {
 void destroy_priority_queue(p_queue_t **q) {
     while (get_list_size((*q)->l) > 0) {
         elem_t cur_elem;
+
         access_element((*q)->l, 0, (void *)&cur_elem);
         free(cur_elem.datum);
         remove_from_list((*q)->l, 0);
     }
 
     free((*q)->l);
-
     free(*q);
+
     *q = NULL;
 }

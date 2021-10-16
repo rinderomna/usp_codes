@@ -56,16 +56,22 @@ int main() {
                 push(pilha_de_delimitadores, delimitador);
             } else if (tipo_do_delimitador == FECHAMENTO) {
                 elem_t ultimo_delimitador = ' ';
+
                 int status_da_retirada = pop(pilha_de_delimitadores, &ultimo_delimitador);
-                if (status_da_retirada == FAIL ||
-                    (ultimo_delimitador != '[' || delimitador != ']') &&
+
+                if (
+                        status_da_retirada == FAIL ||
+                        (ultimo_delimitador != '[' || delimitador != ']') &&
                         (ultimo_delimitador != '(' || delimitador != ')') &&
-                        (ultimo_delimitador != '{' || delimitador != '}')) {
+                        (ultimo_delimitador != '{' || delimitador != '}')
+                    ) {
                     balanceado = FALSE;
+
                     scanf("%*[^\r\n]s");  // Ignora ate o final da linha
                 }
             } else if (tipo_do_delimitador == SIMETRICO) {
                 elem_t ultimo_delimitador = ' ';
+                
                 int status_da_consulta = top(pilha_de_delimitadores, &ultimo_delimitador);
 
                 if (status_da_consulta == FAIL || ultimo_delimitador != delimitador) {
@@ -84,14 +90,16 @@ int main() {
 
 tipo_delimitador_t tipo_de_delimitador(char delimitador) {
     if (
-        delimitador == '[' ||
-        delimitador == '(' ||
-        delimitador == '{') {
+            delimitador == '[' ||
+            delimitador == '(' ||
+            delimitador == '{'
+        ) {
         return ABERTURA;
     } else if (
-        delimitador == ']' ||
-        delimitador == ')' ||
-        delimitador == '}') {
+            delimitador == ']' ||
+            delimitador == ')' ||
+            delimitador == '}'
+        ) {
         return FECHAMENTO;
     } else if (delimitador == '"') {
         return SIMETRICO;

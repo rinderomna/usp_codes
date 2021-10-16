@@ -2,6 +2,7 @@
 #include <stdlib.h>
 
 #include "generic_linked_list.h"
+#include "str.h"
 
 struct node {
     void *elem;
@@ -14,17 +15,6 @@ struct list {
     int size;
     int elem_size;
 };
-
-void *copy_memory(void *dest, void *src, size_t n_bytes) {
-    char *d = (char *)dest;
-    char *s = (char *)src;
-
-    for (int i = 0; i < (int)n_bytes; i++) {
-        d[i] = s[i];
-    }
-
-    return dest;
-}
 
 list_t *create_list(int elem_size) {
     list_t *l = (list_t *)malloc(sizeof(list_t));
