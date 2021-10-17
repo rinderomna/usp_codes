@@ -34,7 +34,7 @@ typedef struct c_coefficient {
  * Reads a wav file and stores its information in an unsigned char verctor,
  * dinamically allocated.
  * 
- * @param fname (char *): name of/path to thewav file to be read.
+ * @param fname (char *): name of/path to the wav file to be read.
  * @param dataSize (int *): reference to an integer variable that will store the
  * number of samples in the audio file read. 
  * @return (unsigned char *): pointer to the first byte of a dinamically allocated
@@ -42,10 +42,34 @@ typedef struct c_coefficient {
  */
 unsigned char *read_wav_data(char *fname, int *dataSize);
 
+/* |DFT|
+ * Performs a Discrete Fourrier Transform in the audio samples vector. outputting
+ * a dinamically allocated vector of complex coefficients.
+ * 
+ * @param audio (unsigned char *): audio samples vector.
+ * @param length (int): number of samples in the audio samples vector. 
+ * @return (c_coefficients_t *): pointer to the first byte of a dinamically allocated
+ * vector of complex coefficients.
+ */
 c_coefficient_t *DFT(unsigned char *audio, int length);
 
+/* |inverse_DFT|
+ * Performs an Inverse Discrete Fourrier Transform in a complex coeffiecients vector,
+ * outputting an audio samples vector.
+ * 
+ * @param complex_coefficients (c_coefficients_t *): complex coefficients vector.
+ * @param length (int): number of samples in the complex coefficients vector. 
+ * @return (unsigned char *): pointer to the first byte of a dinamically allocated
+ * vector of audio samples.
+ */
 unsigned char *inverse_DFT(c_coefficient_t *complex_coefficients, int length);
 
+/* |magnitude|
+ * Evaluate the magnitude of a complex number.
+ * 
+ * @param z (double complex): complex number whose magnitude will be evaluated.
+ * @return (double): complex number magnitude.
+ */
 double magnitude(double complex z);
 
 int count_negatives(c_coefficient_t *complex_coefficients, int length);
