@@ -1,5 +1,5 @@
 typedef struct _IO_FILE FILE;
-typedef unsigned long size_t;
+typedef __SIZE_TYPE__ size_t;
 typedef unsigned char symbol_t;
 typedef symbol_t * string_t;
 
