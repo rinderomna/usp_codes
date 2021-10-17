@@ -19,6 +19,11 @@ typedef int bool_t;
 #define FALSE 0
 #define TRUE 1
 
+typedef enum comparator_type {
+    COMPLEX,
+    INDEX
+} comparator_type_t;
+
 /* |c_coefficient_t|
  * Complex Coefficient type carries not only the its complex value, but also
  * its original index, which is the index before the sorting by magnitude. This
@@ -65,26 +70,58 @@ c_coefficient_t *DFT(unsigned char *audio, int length);
 unsigned char *inverse_DFT(c_coefficient_t *complex_coefficients, int length);
 
 /* |magnitude|
- * Evaluate the magnitude of a complex number.
+ * Evaluates the magnitude of a complex number.
  * 
  * @param z (double complex): complex number whose magnitude will be evaluated.
  * @return (double): complex number magnitude.
  */
 double magnitude(double complex z);
 
+/* |count_negatives|
+ * Counts the number os complex coefficients with both real and imaginary parts
+ * less than or equal to zero.
+ * 
+ * @param complex_coefficients (c_coefficients_t *): complex coefficients vector.
+ * @param length (int): number of samples in the complex coefficients vector. 
+ * @return (int): number of complex coefficients with both real and imaginary parts 
+ * less than or equal to zero.
+ */
 int count_negatives(c_coefficient_t *complex_coefficients, int length);
 
+/* |complex_comparator|
+ * Compares 2 complex coefficients by their complex values, returning true if the first
+ * is greater than the second.
+ *
+ * @param z1 (c_coefficient_t): first complex coefficient.
+ * @param z2 (c_coefficient_t): second complex coefficient.
+ * @return (bool_t): true if the first complex coefficient value is greater than the 
+ * second's..
+ */
 bool_t complex_comparator(c_coefficient_t z1, c_coefficient_t z2);
 
+/* |index_comparator|
+ * Compares 2 complex coefficients by their original indexes, returning true if the first
+ * is less than the second.
+ *
+ * @param z1 (c_coefficient_t): first complex coefficient.
+ * @param z2 (c_coefficient_t): second complex coefficient.
+ * @return (bool_t): true if the first complex coefficient original index is less than the 
+ * second's.
+ */
 bool_t index_comparator(c_coefficient_t z1, c_coefficient_t z2);
 
-void complex_merge(c_coefficient_t *v, int start, int end);
+/* |merge|
+ * Performs the merge step of a mergesort algorithm using the passed comparator type.
+ * 
+ * @param v (c_coefficient_t *): complex cofficients vector.
+ * @param start (int): first index of merge region.
+ * @param end (int): last index of merge region.
+ * @param ctype (comparator_type_t): comparator type used to merge.
+ * 
+ */
+void merge(c_coefficient_t *v, int start, int end, comparator_type_t ctype);
 
-void complex_mergesort(c_coefficient_t *v, int start, int end);
-
-void index_merge(c_coefficient_t *v, int start, int end);
-
-void index_mergesort(c_coefficient_t *v, int start, int end);
+void mergesort(c_coefficient_t *v, int start, int end, comparator_type_t ctype);
 
 int main() {
     string_t audio_file_name = read_line(stdin);
@@ -99,7 +136,7 @@ int main() {
 
     int n_negatives = count_negatives(complex_coefficients, data_size);
 
-    complex_mergesort(complex_coefficients, 0, data_size - 1);
+    mergesort(complex_coefficients, 0, data_size - 1);
 
     printf("%d\n", data_size);
     printf("%d\n", n_negatives);
@@ -220,7 +257,7 @@ bool_t index_comparator(c_coefficient_t z1, c_coefficient_t z2) {
     return z1.original_index < z2.original_index;
 }
 
-void complex_merge(c_coefficient_t *v, int start, int end) {
+void merge(c_coefficient_t *v, int start, int end, comparator_type_t ctype) {
     c_coefficient_t *aux = (c_coefficient_t *)malloc((end - start + 1) * sizeof(c_coefficient_t));
 
     int c = (start + end) / 2;
@@ -230,7 +267,8 @@ void complex_merge(c_coefficient_t *v, int start, int end) {
     int k = 0;
 
     while (i <= c && j <= end) {
-        if (complex_comparator(v[i], v[j])) {
+        if (complex_comparator(v[i], v[j]) && ctype == COMPLEX ||
+            index_comparator(v[i], v[j]) && ctype == INDEX) {
             aux[k].value = v[i].value;
             aux[k].original_index = v[i].original_index;
 
@@ -269,77 +307,15 @@ void complex_merge(c_coefficient_t *v, int start, int end) {
     free(aux);
 }
 
-void complex_mergesort(c_coefficient_t *v, int start, int end) {
+void mergesort(c_coefficient_t *v, int start, int end, comparator_type_t ctype) {
     if (start == end) {
         return;
     }
 
     int c = (start + end) / 2;
 
-    complex_mergesort(v, start, c);
-    complex_mergesort(v, c + 1, end);
+    mergesort(v, start, c, ctype);
+    mergesort(v, c + 1, end, ctype);
 
-    complex_merge(v, start, end);
-}
-
-void index_merge(c_coefficient_t *v, int start, int end) {
-    c_coefficient_t *aux = (c_coefficient_t *)malloc((end - start + 1) * sizeof(c_coefficient_t));
-
-    int c = (start + end) / 2;
-
-    int i = start;
-    int j = c + 1;
-    int k = 0;
-
-    while (i <= c && j <= end) {
-        if (index_comparator(v[i], v[j])) {
-            aux[k].value = v[i].value;
-            aux[k].original_index = v[i].original_index;
-
-            i++;
-        } else {
-            aux[k].value = v[j].value;
-            aux[k].original_index = v[j].original_index;
-
-            j++;
-        }
-
-        k++;
-    }
-
-    while (i <= c) {
-        aux[k].value = v[i].value;
-        aux[k].original_index = v[i].original_index;
-
-        i++;
-        k++;
-    }
-
-    while (j <= end) {
-        aux[k].value = v[j].value;
-        aux[k].original_index = v[j].original_index;
-
-        j++;
-        k++;
-    }
-
-    for (i = start, k = 0; i <= end; i++, k++) {
-        v[i].value = aux[k].value;
-        v[i].original_index = aux[k].original_index;
-    }
-
-    free(aux);
-}
-
-void index_mergesort(c_coefficient_t *v, int start, int end) {
-    if (start == end) {
-        return;
-    }
-
-    int c = (start + end) / 2;
-
-    index_mergesort(v, start, c);
-    index_mergesort(v, c + 1, end);
-
-    index_merge(v, start, end);
+    merge(v, start, end, ctype);
 }
