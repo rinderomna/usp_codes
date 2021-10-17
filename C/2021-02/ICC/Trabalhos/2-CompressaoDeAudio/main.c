@@ -111,17 +111,29 @@ bool_t complex_comparator(c_coefficient_t z1, c_coefficient_t z2);
 bool_t index_comparator(c_coefficient_t z1, c_coefficient_t z2);
 
 /* |merge|
- * Performs the merge step of a mergesort algorithm using the passed comparator type.
+ * Performs the merge step of a mergesort algorithm using the passed comparator type and the
+ * merge region limits.
  * 
  * @param v (c_coefficient_t *): complex cofficients vector.
  * @param start (int): first index of merge region.
  * @param end (int): last index of merge region.
  * @param ctype (comparator_type_t): comparator type used to merge.
- * 
  */
 void merge(c_coefficient_t *v, int start, int end, comparator_type_t ctype);
 
+/* |mergesort|
+ * Performs a mergesort algorithm using the passed comparator type and the  merge region limits.
+ * 
+ * @param v (c_coefficient_t *): complex cofficients vector.
+ * @param start (int): first index of merge region.
+ * @param end (int): last index of merge region.
+ * @param ctype (comparator_type_t): comparator type used to merge.
+ */
 void mergesort(c_coefficient_t *v, int start, int end, comparator_type_t ctype);
+
+void save_data_to_wav_file(unsigned char *audio, char *original_audio) {
+
+}
 
 int main() {
     string_t audio_file_name = read_line(stdin);
@@ -136,7 +148,7 @@ int main() {
 
     int n_negatives = count_negatives(complex_coefficients, data_size);
 
-    mergesort(complex_coefficients, 0, data_size - 1);
+    mergesort(complex_coefficients, 0, data_size - 1, COMPLEX);
 
     printf("%d\n", data_size);
     printf("%d\n", n_negatives);
@@ -151,7 +163,7 @@ int main() {
         complex_coefficients[i].value = 0;
     }
 
-    index_mergesort(complex_coefficients, 0, data_size - 1);
+    mergesort(complex_coefficients, 0, data_size - 1, INDEX);
 
     unsigned char *compressed_samples = inverse_DFT(complex_coefficients, data_size);
 
