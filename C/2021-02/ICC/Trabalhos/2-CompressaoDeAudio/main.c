@@ -38,7 +38,7 @@ typedef struct c_coefficient {
  * @param dataSize (int *): reference to an integer variable that will store the
  * number of samples in the audio file read. 
  * @return (unsigned char *): pointer to the first byte of a dinamically allocated
- * vector of audio samples
+ * vector of audio samples, which are unsigned 8 bits integers, from 0 to 255.
  */
 unsigned char *read_wav_data(char *fname, int *dataSize);
 
