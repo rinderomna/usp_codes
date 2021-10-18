@@ -13,6 +13,13 @@ size_t string_length(string_t str) {
     return len;
 }
 
+int read_int(FILE *stream) {
+    int n;
+    fscanf(stream, " %d", &n);
+
+    return n;
+}
+
 void new_line() {
     printf("\n");
 }
@@ -21,6 +28,10 @@ void new_lines(unsigned n) {
     for (unsigned i = 0; i < n; i++) {
         printf("\n");
     } 
+}
+
+void println_int(int n) {
+    printf("%d\n", n);
 }
 
 void print_string(string_t str) {

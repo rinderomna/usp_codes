@@ -4,8 +4,10 @@ typedef unsigned char symbol_t;
 typedef symbol_t * string_t;
 
 size_t string_length(string_t str);
+int read_int(FILE *stream);
 void new_line();
 void new_lines(unsigned n);
+void println_int(int n);
 void print_string(string_t str);
 void println_string(string_t str);
 int compare_strings(string_t str1, string_t str2);

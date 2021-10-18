@@ -25,8 +25,8 @@ typedef enum comparator_type {
 } comparator_type_t;
 
 /* |c_coefficient_t|
- * Complex Coefficient type carries not only the its complex value, but also
- * its original index, which is the index before the sorting by magnitude. This
+ * Complex Coefficient Type carries not only its complex value, but also its 
+ * original index, which is the index before the sorting by magnitude. This
  * is so in order to be able to return each element to its original position 
  * after the nullification step.
  */
@@ -34,6 +34,52 @@ typedef struct c_coefficient {
     int original_index;
     double complex value;
 } c_coefficient_t;
+
+unsigned char *read_wav_data(char *fname, int *dataSize);
+c_coefficient_t *DFT(unsigned char *audio, int length);
+unsigned char *inverse_DFT(c_coefficient_t *complex_coefficients, int length);
+double magnitude(double complex z);
+int count_negatives(c_coefficient_t *complex_coefficients, int length);
+bool_t complex_comparator(c_coefficient_t z1, c_coefficient_t z2);
+bool_t index_comparator(c_coefficient_t z1, c_coefficient_t z2);
+void merge(c_coefficient_t *v, int start, int end, comparator_type_t ctype);
+void mergesort(c_coefficient_t *v, int start, int end, comparator_type_t ctype);
+void nullification(c_coefficient_t *complex_coefficients, int length, int T);
+void save_data_to_wav_file(unsigned char *audio, char *audio_filename, int length);
+
+int main() {
+    string_t audio_file_name = read_line(stdin);
+
+    int T = read_int(stdin);
+
+    int data_size = 0;
+    unsigned char *samples = read_wav_data((char *)audio_file_name, &data_size);
+
+    c_coefficient_t *complex_coefficients = DFT(samples, data_size);
+
+    int n_negatives = count_negatives(complex_coefficients, data_size);
+
+    mergesort(complex_coefficients, 0, data_size - 1, COMPLEX);
+
+    println_int(data_size);
+    println_int(n_negatives);
+
+    nullification(complex_coefficients, data_size, T);
+
+    mergesort(complex_coefficients, 0, data_size - 1, INDEX);
+
+    unsigned char *compressed_samples = inverse_DFT(complex_coefficients, data_size);
+
+    save_data_to_wav_file(compressed_samples, (char *)audio_file_name, data_size);
+
+    // Freeing memory:
+    free(complex_coefficients);
+    free(samples);
+    free(compressed_samples);
+    destroy_string(audio_file_name);
+
+    return EXIT_SUCCESS;
+}
 
 /* |read_wav_data|
  * Reads a wav file and stores its information in an unsigned char verctor,
@@ -45,156 +91,6 @@ typedef struct c_coefficient {
  * @return (unsigned char *): pointer to the first byte of a dinamically allocated
  * vector of audio samples, which are unsigned 8 bits integers, from 0 to 255.
  */
-unsigned char *read_wav_data(char *fname, int *dataSize);
-
-/* |DFT|
- * Performs a Discrete Fourrier Transform in the audio samples vector. outputting
- * a dinamically allocated vector of complex coefficients.
- * 
- * @param audio (unsigned char *): audio samples vector.
- * @param length (int): number of samples in the audio samples vector. 
- * @return (c_coefficients_t *): pointer to the first byte of a dinamically allocated
- * vector of complex coefficients.
- */
-c_coefficient_t *DFT(unsigned char *audio, int length);
-
-/* |inverse_DFT|
- * Performs an Inverse Discrete Fourrier Transform in a complex coeffiecients vector,
- * outputting an audio samples vector.
- * 
- * @param complex_coefficients (c_coefficients_t *): complex coefficients vector.
- * @param length (int): number of samples in the complex coefficients vector. 
- * @return (unsigned char *): pointer to the first byte of a dinamically allocated
- * vector of audio samples.
- */
-unsigned char *inverse_DFT(c_coefficient_t *complex_coefficients, int length);
-
-/* |magnitude|
- * Evaluates the magnitude of a complex number.
- * 
- * @param z (double complex): complex number whose magnitude will be evaluated.
- * @return (double): complex number magnitude.
- */
-double magnitude(double complex z);
-
-/* |count_negatives|
- * Counts the number os complex coefficients with both real and imaginary parts
- * less than or equal to zero.
- * 
- * @param complex_coefficients (c_coefficients_t *): complex coefficients vector.
- * @param length (int): number of samples in the complex coefficients vector. 
- * @return (int): number of complex coefficients with both real and imaginary parts 
- * less than or equal to zero.
- */
-int count_negatives(c_coefficient_t *complex_coefficients, int length);
-
-/* |complex_comparator|
- * Compares 2 complex coefficients by their complex values, returning true if the first
- * is greater than the second.
- *
- * @param z1 (c_coefficient_t): first complex coefficient.
- * @param z2 (c_coefficient_t): second complex coefficient.
- * @return (bool_t): true if the first complex coefficient value is greater than the 
- * second's..
- */
-bool_t complex_comparator(c_coefficient_t z1, c_coefficient_t z2);
-
-/* |index_comparator|
- * Compares 2 complex coefficients by their original indexes, returning true if the first
- * is less than the second.
- *
- * @param z1 (c_coefficient_t): first complex coefficient.
- * @param z2 (c_coefficient_t): second complex coefficient.
- * @return (bool_t): true if the first complex coefficient original index is less than the 
- * second's.
- */
-bool_t index_comparator(c_coefficient_t z1, c_coefficient_t z2);
-
-/* |merge|
- * Performs the merge step of a mergesort algorithm using the passed comparator type and the
- * merge region limits.
- * 
- * @param v (c_coefficient_t *): complex cofficients vector.
- * @param start (int): first index of merge region.
- * @param end (int): last index of merge region.
- * @param ctype (comparator_type_t): comparator type used to merge.
- */
-void merge(c_coefficient_t *v, int start, int end, comparator_type_t ctype);
-
-/* |mergesort|
- * Performs a mergesort algorithm using the passed comparator type and the  merge region limits.
- * 
- * @param v (c_coefficient_t *): complex cofficients vector.
- * @param start (int): first index of merge region.
- * @param end (int): last index of merge region.
- * @param ctype (comparator_type_t): comparator type used to merge.
- */
-void mergesort(c_coefficient_t *v, int start, int end, comparator_type_t ctype);
-
-void save_data_to_wav_file(unsigned char *audio, char *original_audio) {
-
-}
-
-int main() {
-    string_t audio_file_name = read_line(stdin);
-
-    int T = 0;
-    scanf(" %d", &T);
-
-    int data_size = 0;
-    unsigned char *samples = read_wav_data((char *)audio_file_name, &data_size);
-
-    c_coefficient_t *complex_coefficients = DFT(samples, data_size);
-
-    int n_negatives = count_negatives(complex_coefficients, data_size);
-
-    mergesort(complex_coefficients, 0, data_size - 1, COMPLEX);
-
-    printf("%d\n", data_size);
-    printf("%d\n", n_negatives);
-
-    for (int i = 0; i < T; i++) {
-        printf("%d", (int)magnitude(complex_coefficients[i].value));
-
-        if (i < T - 1) new_line();
-    }
-
-    for (int i = T; i < data_size; i++) {
-        complex_coefficients[i].value = 0;
-    }
-
-    mergesort(complex_coefficients, 0, data_size - 1, INDEX);
-
-    unsigned char *compressed_samples = inverse_DFT(complex_coefficients, data_size);
-
-    FILE *compressed_audio = NULL;
-    FILE *original_audio = NULL;
-
-    original_audio = fopen((char *)audio_file_name, "rb");
-    compressed_audio = fopen("compressed_audio.wav", "wb");
-
-    void *cur_byte = malloc(44);
-
-    fread(cur_byte, 44, 1, original_audio);
-    fwrite(cur_byte, 44, 1, compressed_audio);
-
-    free(cur_byte);
-
-    for (int i = 0; i < data_size; i++) {
-        fwrite(&compressed_samples[i], sizeof(unsigned char), 1, compressed_audio);
-    }
-
-    fclose(compressed_audio);
-    fclose(original_audio);
-
-    free(complex_coefficients);
-    free(samples);
-    free(compressed_samples);
-    destroy_string(audio_file_name);
-
-    return EXIT_SUCCESS;
-}
-
 unsigned char *read_wav_data(char *fname, int *dataSize) {
     FILE *fp = fopen(fname, "rb");
     unsigned char buf4[4];
@@ -209,12 +105,21 @@ unsigned char *read_wav_data(char *fname, int *dataSize) {
     while (i < *dataSize) {
         fread(&data[i++], sizeof(unsigned char), 1, fp);
     }
-    
+
     fclose(fp);
-    
+
     return data;
 }
 
+/* |DFT|
+ * Performs a Discrete Fourrier Transform in the audio samples vector. outputting
+ * a dinamically allocated vector of complex coefficients.
+ * 
+ * @param audio (unsigned char *): audio samples vector.
+ * @param length (int): number of samples in the audio samples vector. 
+ * @return (c_coefficients_t *): pointer to the first byte of a dinamically allocated
+ * vector of complex coefficients.
+ */
 c_coefficient_t *DFT(unsigned char *audio, int length) {
     c_coefficient_t *coef = (c_coefficient_t *)calloc(length, sizeof(c_coefficient_t));
 
@@ -228,6 +133,15 @@ c_coefficient_t *DFT(unsigned char *audio, int length) {
     return coef;
 }
 
+/* |inverse_DFT|
+ * Performs an Inverse Discrete Fourrier Transform in a complex coeffiecients vector,
+ * outputting an audio samples vector.
+ * 
+ * @param complex_coefficients (c_coefficients_t *): complex coefficients vector.
+ * @param length (int): number of samples in the complex coefficients vector. 
+ * @return (unsigned char *): pointer to the first byte of a dinamically allocated
+ * vector of audio samples.
+ */
 unsigned char *inverse_DFT(c_coefficient_t *complex_coefficients, int length) {
     unsigned char *audio = (unsigned char *)calloc(length, sizeof(unsigned char));
 
@@ -245,10 +159,25 @@ unsigned char *inverse_DFT(c_coefficient_t *complex_coefficients, int length) {
     return audio;
 }
 
+/* |magnitude|
+ * Evaluates the magnitude of a complex number.
+ * 
+ * @param z (double complex): complex number whose magnitude will be evaluated.
+ * @return (double): complex number magnitude.
+ */
 double magnitude(double complex z) {
     return sqrt(pow(creal(z), 2) + pow(cimag(z), 2));
 }
 
+/* |count_negatives|
+ * Counts the number os complex coefficients with both real and imaginary parts
+ * less than or equal to zero.
+ * 
+ * @param complex_coefficients (c_coefficients_t *): complex coefficients vector.
+ * @param length (int): number of samples in the complex coefficients vector. 
+ * @return (int): number of complex coefficients with both real and imaginary parts 
+ * less than or equal to zero.
+ */
 int count_negatives(c_coefficient_t *complex_coefficients, int length) {
     int counter = 0;
 
@@ -261,14 +190,41 @@ int count_negatives(c_coefficient_t *complex_coefficients, int length) {
     return counter;
 }
 
+/* |complex_comparator|
+ * Compares 2 complex coefficients by their complex values, returning true if the first
+ * is greater than the second.
+ *
+ * @param z1 (c_coefficient_t): first complex coefficient.
+ * @param z2 (c_coefficient_t): second complex coefficient.
+ * @return (bool_t): true if the first complex coefficient value is greater than the 
+ * second's..
+ */
 bool_t complex_comparator(c_coefficient_t z1, c_coefficient_t z2) {
     return magnitude(z1.value) > magnitude(z2.value);
 }
 
+/* |index_comparator|
+ * Compares 2 complex coefficients by their original indexes, returning true if the first
+ * is less than the second.
+ *
+ * @param z1 (c_coefficient_t): first complex coefficient.
+ * @param z2 (c_coefficient_t): second complex coefficient.
+ * @return (bool_t): true if the first complex coefficient original index is less than the 
+ * second's.
+ */
 bool_t index_comparator(c_coefficient_t z1, c_coefficient_t z2) {
     return z1.original_index < z2.original_index;
 }
 
+/* |merge|
+ * Performs the merge step of a mergesort algorithm using the passed comparator type and the
+ * merge region limits.
+ * 
+ * @param v (c_coefficient_t *): complex cofficients vector.
+ * @param start (int): first index of merge region.
+ * @param end (int): last index of merge region.
+ * @param ctype (comparator_type_t): comparator type used to merge.
+ */
 void merge(c_coefficient_t *v, int start, int end, comparator_type_t ctype) {
     c_coefficient_t *aux = (c_coefficient_t *)malloc((end - start + 1) * sizeof(c_coefficient_t));
 
@@ -279,8 +235,8 @@ void merge(c_coefficient_t *v, int start, int end, comparator_type_t ctype) {
     int k = 0;
 
     while (i <= c && j <= end) {
-        if (complex_comparator(v[i], v[j]) && ctype == COMPLEX ||
-            index_comparator(v[i], v[j]) && ctype == INDEX) {
+        if ((complex_comparator(v[i], v[j]) && ctype == COMPLEX) ||
+            (index_comparator(v[i], v[j]) && ctype == INDEX)) {
             aux[k].value = v[i].value;
             aux[k].original_index = v[i].original_index;
 
@@ -319,6 +275,14 @@ void merge(c_coefficient_t *v, int start, int end, comparator_type_t ctype) {
     free(aux);
 }
 
+/* |mergesort|
+ * Performs a mergesort algorithm using the passed comparator type and the  merge region limits.
+ * 
+ * @param v (c_coefficient_t *): complex coefficients vector.
+ * @param start (int): first index of merge region.
+ * @param end (int): last index of merge region.
+ * @param ctype (comparator_type_t): comparator type used to merge.
+ */
 void mergesort(c_coefficient_t *v, int start, int end, comparator_type_t ctype) {
     if (start == end) {
         return;
@@ -330,4 +294,57 @@ void mergesort(c_coefficient_t *v, int start, int end, comparator_type_t ctype) 
     mergesort(v, c + 1, end, ctype);
 
     merge(v, start, end, ctype);
+}
+
+/* |nullification|
+ * Assign zero to the complex coefficients whose index is greater or equal to T. This leaves the
+ * T most important amplitudes, since the complex coefficients vector is supposed to be sorted in
+ * descending order of magnitude at beggining of this step.
+ * 
+ * @param complex_coefficients (c_coefficient_t *): complex coefficients vector. Supposed to be in
+ * descending order of magnitude.
+ * @param length (int): number of complex coefficients in the complex coefficients vector.
+ * @param T (int): number of the most important coefficients to keep. The others will be assigned 
+ * to zero.
+ */
+void nullification(c_coefficient_t *complex_coefficients, int length, int T) {
+    for (int i = 0; i < T; i++) {
+        printf("%d", (int)magnitude(complex_coefficients[i].value));
+
+        if (i < T - 1) new_line();
+    }
+
+    for (int i = T; i < length; i++) {
+        complex_coefficients[i].value = 0;
+    }
+}
+
+/* |save_data_to_wav_file|
+ * Saves passed audio samples to a audio file called "compressed_audio.wav", copying the 44 bytes
+ * header from the original audio file.
+ * 
+ * @param audio (unsigned char *): vector of audio samples to save.
+ * @param audio_filename (char *): name of the original audio file.
+ * @param length (int): number of samples in de audio samples vector.
+ */
+void save_data_to_wav_file(unsigned char *audio, char *audio_filename, int length) {
+    FILE *compressed_audio = NULL;
+    FILE *original_audio = NULL;
+
+    original_audio = fopen((char *)audio_filename, "rb");
+    compressed_audio = fopen("compressed_audio.wav", "wb");
+
+    void *cur_byte = malloc(44);
+
+    fread(cur_byte, 44, 1, original_audio);
+    fwrite(cur_byte, 44, 1, compressed_audio);
+
+    free(cur_byte);
+
+    for (int i = 0; i < length; i++) {
+        fwrite(&audio[i], sizeof(unsigned char), 1, compressed_audio);
+    }
+
+    fclose(compressed_audio);
+    fclose(original_audio);
 }
