@@ -126,20 +126,20 @@ int main(int argc, char *argv[]) {
 
     // Imprimindo toda a tabela:
 
-    printf("___________________________________________________\n");
-    printf("    R      |      Q      |      m      |      n    \n");
-    printf("___________________________________________________\n");
+    printf("___________________________________________________________________________________________________\n");
+    printf("          R            |            Q            |            m            |            n          \n");
+    printf("___________________________________________________________________________________________________\n");
 
     for (int j = 0; j < table.n_lines - 1; j++) {
         if (j < 2) {
-            printf("%9lld  |  %9s  |  %9lld  |  %9lld\n", table.R[j], "*", table.m[j], table.n[j]);
+            printf("%21lld  |  %21s  |  %21lld  |  %21lld\n", table.R[j], "*", table.m[j], table.n[j]);
         } else {
-            printf("%9lld  |  %9lld  |  %9lld  |  %9lld\n", table.R[j], table.Q[j], table.m[j], table.n[j]);
+            printf("%21lld  |  %21lld  |  %21lld  |  %21lld\n", table.R[j], table.Q[j], table.m[j], table.n[j]);
         }
     }
 
-    printf("___________________________________________________\n");
-
+    printf("___________________________________________________________________________________________________\n");
+    
     // Imprimindo resultados e conclusões:
 
     printf("\nGCD(%lld, %lld) = %lld", a, b, table.R[i - 1]);
