@@ -71,10 +71,18 @@ int main(int argc, char *argv[]) {
 
     // Testando se a condição (a > b >= 0) não é atendida:
 
-    if (a <= b || a <= 0 || b < 0) {
+    if (a <= b || b < 0) {
         printf("\nInput errado! Condição: (a > b >= 0) \n");
 
         return EXIT_FAILURE;
+    }
+
+    // Testando o caso de b = 0, pois [0] nunca é invertível
+
+    if (b == 0) {
+        printf("\nComo b = 0, [%lld] não é invertível em Z_%lld.\n\n", b, a);
+
+        return EXIT_SUCCESS;
     }
 
     euclides_table_t table;
