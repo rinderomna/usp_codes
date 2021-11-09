@@ -1,0 +1,567 @@
+%%%%%% Configurando os pacotes e comandos %%%%%%
+%%%%%% Pule para a linha 62 %%%%%%%
+\documentclass[fontsize=10pt]{article}
+\usepackage[margin=0.70in]{geometry}
+\usepackage{lipsum,mwe,abstract}
+\usepackage[T1]{fontenc} 
+\usepackage[brazilian]{babel} 
+\usepackage{setspace}
+\usepackage{caption}
+\usepackage[hidelinks]{hyperref}
+\usepackage{multirow}
+
+\usepackage{amssymb}
+
+\usepackage{fancyhdr} % Custom headers and footers
+%\pagestyle{fancyplain} % Makes all pages in the document conform to the custom headers and footers
+%\fancyhead{} 
+%\fancyfoot[C]{\thepage} % Page numbering for right footer
+\setlength\parindent{0pt} 
+\setstretch{1.5}
+
+\usepackage{amsmath,amsfonts,amsthm} % Math packages
+\usepackage{wrapfig}
+
+\usepackage{graphicx}
+\usepackage{float}
+\usepackage{subcaption}
+\usepackage{comment}
+\usepackage{enumitem}
+\usepackage{cuted}
+\usepackage{sectsty} % Allows customizing section commands
+
+\usepackage{listings}
+\usepackage{verbatim}
+\usepackage{xcolor}
+
+\definecolor{codegreen}{rgb}{0,0.6,0}
+\definecolor{codegray}{rgb}{0.5,0.5,0.5}
+\definecolor{codepurple}{rgb}{0.58,0,0.82}
+\definecolor{backcolour}{rgb}{0.95,0.95,0.92}
+
+\lstdefinestyle{mystyle}{
+    backgroundcolor=\color{backcolour},   
+    commentstyle=\color{codegreen},
+    keywordstyle=\color{magenta},
+    numberstyle=\tiny\color{codegray},
+    stringstyle=\color{codepurple},
+    basicstyle=\ttfamily\footnotesize,
+    breakatwhitespace=false,         
+    breaklines=true,                 
+    captionpos=b,                    
+    keepspaces=true,                 
+    numbers=left,                    
+    numbersep=8pt,                  
+    showspaces=false,                
+    showstringspaces=false,
+    showtabs=false,                  
+    tabsize=2
+}
+
+\lstset{style=mystyle}
+
+\allsectionsfont{\normalfont \normalsize \scshape} % Section names in small caps and normal fonts
+
+\renewenvironment{abstract} % Change how the abstract look to remove margins
+ {\small
+  \begin{center}
+  \bfseries \abstractname\vspace{-.5em}\vspace{0pt}
+  \end{center}
+  \list{}{%
+    \setlength{\leftmargin}{0mm}
+    \setlength{\rightmargin}{\leftmargin}%
+  }
+  \item\relax}
+ {\endlist}
+ 
+\makeatletter
+\renewcommand{\maketitle}{\bgroup\setlength{\parindent}{0pt}% Change how the title looks like
+\begin{center}
+    \textbf{
+      Universidade de São Paulo\\
+      Instituto de Ciências Matemáticas e Computação
+    }
+\end{center}
+\begin{flushleft}
+  \textbf{\@title}
+  \@author\\
+  [3pt] 
+  \@date
+\end{flushleft}\egroup
+}
+\makeatother
+%%% Daqui pra cima é apenas configuração %%%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+%%%%%% Definindo seus dados %%%%%%
+\title{\Large{Relatório do Módulo 1}\\
+\large{\textbf{Análise Comparativa de Algoritmos de Ordenação:}}\\
+\textbf{\textit{Bubble Sort}, \textit{Insertion Sort} \& \textit{Mergesort}\\}
+}
+\author{\vspace{15pt} Hélio Nogueira Cardoso - N°USP: 10310227} 
+\date{\today}
+
+
+\begin{document}
+\maketitle
+ 
+\begin{abstract}
+
+\end{abstract}
+
+\rule{\linewidth}{0.5pt}
+
+\section{Introdução}
+\label{int}
+
+Os procedimentos de ordenação são essenciais para a área da computação, e é muito importante que se saiba escolher o método adequado, pois essa escolha tem grande impacto no desempenho de um programa. O presente relatório tem por objetivo analisar e comparar diferentes algoritmos de ordenação. Nomeadamente, os algoritmos \textit{Bubble Sort}, \textit{Insertion Sort} e \textit{Mergesort}, implementados em linguagem C. Buscou-se fazer uma análise de tais métodos, comparando seus tempos de execução, número de operações efetuadas, utilização de memória, dentre outros fatores. Para a análise de algoritmos, considera-se sempre o pior caso. No entanto, é importante também discutir a nuance de outros casos para que se os compreenda melhor e então se possa escolher mais sabiamente qual deles usar para determinado cenário. Espera-se que a leitura deste documento torne mais claro ao leitor o funcionamento dos algoritmos apresentados, e também que o auxilie caso precise decidir qual método de ordenação utilizar em cada uma de suas aplicações.
+
+\section{Metodologia e desenvolvimento}
+
+\subsection{Algoritmos de Ordenação}
+Os algoritmos de ordenação são algoritmos que têm por objetivo, a partir de uma sequência de elementos e um critério de comparação entre eles (que estipula quando um elemento é maior, menor ou equivalente a outro), retornar uma sequência com os mesmos elementos, porém em ordem. Essa ordem pode ser crescente ou decrescente, a depender da definição do problema. Far-se-á, aqui, ordenações para ordem crescente. Há diferentes algoritmos de ordenação, cada um com suas vantagens e desvantagens, que os tornam mais ou menos adequados para cada cenário.\\
+
+Neste relatório, utilizou-se, para efeito de comparação, os algoritmos \textit{Bubble Sort}, \textit{Insertion Sort} e \textit{Mergesort}, os quais foram implementados, como expresso na seção \ref{int}, em linguagem C. Isso porque o C tem menos camadas de abstração que outras linguagem de mais alto nível, evitando que operações não relevantes sejam executadas, e fazendo, consequentemente, a análise mais acurada. Tais algoritmos serão discutidos e analisados nas seções \ref{bub}, \ref{ins} e \ref{mer}, respectivamente. A comparação será realizada por meio das funções de eficiência e da análise dos tempos de execução médios, além de outros fatores que serão discutidos. Os tempos de execução foram medidos numa mesma máquina, tentando manter as mesmas condições do ambiente computacional.
+
+
+\subsubsection{Bubble Sort}
+\label{bub}
+O algoritmo \textit{Bubble Sort}, também conhecido em português como `algoritmo de ordenação por bolha', é baseado na repetida permutação de elementos adjacentes que estejam fora da ordem estipulada \cite[p. 43]{cormen}. É um algoritmo popular, mas ineficiente. O código utilizado para realizar o \textit{Bubble Sort} foi o que se encontra na \textbf{Figura \ref{bubble-code}}.
+
+\begin{figure}[h]
+\centering
+\includegraphics[width=0.75\textwidth]{images/code_bubble.png}
+\caption{Uma implementação em linguagem C do algoritmo de ordenação \textit{Bubble Sort} que ordena um vetor de inteiros em ordem crescente.}
+\label{bubble-code}
+\end{figure}
+
+Os valores no vetor são comparados de dois em dois adjacentes. A variável inteira $swap$ desempenha o papel de booleano que indicará, após um laço de iterações no vetor, se houve alguma permutação de dois elementos. Caso verdadeiro (houve uma troca), sabe-se que o vetor antes do último laço não estava ordenado, e, portanto, deve-se fazer pelo menos mais um laço de iterações. Caso falso (não houve trocas), conclui-se que o vetor já está ordenado. Logo, o algoritmo chegou ao fim.\\
+
+A cada laço interno de iterações, ordena-se sempre pelo menos um elemento, já que o maior elemento de todos será sempre permutado para frente. Por esse motivo, o laço interno é decrementado uma unidade a mais para cada iteração do laço externo. No pior dos casos, o vetor está, no início, inversamente ordenado (no caso, em ordem decrescente). Assim, a variável $swap$ será verdadeira até a completa execução dos laços, tanto o externo, como os internos.\\
+
+Para fazer o cálculo da função de eficiência do \textit{Bubble Sort}, considerar-se-á apenas as operações de comparação. Não serão consideradas as operações nas linhas dos laços-\textit{for}. Em análise de algoritmos, consideramos sempre o pior caso. O tamanho do vetor de entrada (nomeadamente, seu número de elementos) será indicado, daqui para frente, sempre por $n$.\\
+
+\begin{lstlisting}[language=C]
+void bubble_sort(array_t *array) {
+    int swap = 1;
+
+    for (int i = 0; i < array->n_elements - 1 && swap; i++) { /* (n - 1) */
+        int swap = 0;
+        int tmp;
+        for (int j = 0; j < array->n_elements - i - 1; j++) { /* (n - 1 - i), [i de 0 a (n - 2)] */
+            if (array->values[j] > array->values[j + 1]) { // c.(n - 1 - i), [i de 0 a (n - 2)]
+                tmp = array->values[j + 1]; 
+                array->values[j + 1] = array->values[j];
+                array->values[j] = tmp;
+                swap = 1;
+            }
+        }
+
+        if (swap == 0) break; // c.(n - 1) [sempre verdadeiro, no pior caso]
+    }
+}
+\end{lstlisting}
+
+Assim, seguem os cálculos:
+
+\begin{equation} \label{eq1}
+\begin{split}
+f(n) & = \sum_{i = 0}^{n - 2} c \cdot (n - 1 - i) + c \cdot (n - 1) \\
+     & = c \cdot \Bigg[\sum_{i = 0}^{n - 2} (n - 1) - \sum_{i = 0}^{n - 2} i + (n - 1) \Bigg] \\
+     & = c \cdot \Bigg[\sum_{i = 0}^{n - 1} (n - 1) - \sum_{i = 0}^{n - 2} i \Bigg] \\
+     & = c \cdot \Bigg[(n - 1) \cdot (n - 2) - \sum_{i = 0}^{n - 2} i \Bigg] \\
+\end{split}
+\end{equation}
+
+$$ \text{Para somatório P.A.: 1° termo é $0$, último é $(n - 2)$ e número de termos é $(n - 1)$ }$$
+
+
+\begin{equation} \label{eq2}
+\begin{split}
+f(n) & = c \cdot \Bigg[(n - 1) \cdot (n - 2)  - \frac{(n - 1) \cdot (0 + n - 2)}{2} \Bigg] \\
+	 & = c \cdot \Bigg[(n^2 - 3n + 2)  - \frac{(n^2 - 3n + 2)}{2} \Bigg] \\
+	 & = c \cdot \Bigg[(n^2 - 3n + 2)  - \frac{(n^2 - 3n + 2)}{2} \Bigg] \\
+	 & = c \cdot \Bigg[\frac{1}{2} n^2 - \frac{3}{2} n + 1 \Bigg] \\
+\end{split}
+\end{equation}
+
+$$ \text{Considerando $c = 1$}$$
+
+\begin{equation} \label{eq3}
+\therefore \ f(n) = \frac{1}{2} n^2 - \frac{3}{2} n + 1 
+\end{equation}
+
+A função de eficiência obtida indica que o método \textit{Bubble Sort}, para o pior caso, tem complexidade de tempo quadrática. Em notação assintótica, a qual não será aprofundada neste relatório, o algoritmo de ordenação por bolha pertence a $O(n^2)$.
+
+\subsubsection{Insertion Sort}
+\label{ins}
+
+O algoritmo de ordenação \textit{Insertion Sort}, também conhecido em português como `ordenação por inserção', é de simples implementação e eficiente para a ordenação de um pequeno número de elementos \cite[p. 25]{cormen}. Ele é baseado na divisão do vetor original em duas listas virtuais: uma lista ordenada e uma lista desordenada. A lista ordenada inicia com apenas o primeiro elemento, estando trivialmente já em ordem, por possuir apenas um elemento. A lista virtual desordenada começa com o restante dos elementos.\\
+
+A ordenação então é feita comparando-se o primeiro elemento da lista desordenada, nomeado de chave, com os elementos da lista ordenada de trás para frente (do último em direção ao primeiro). Checa-se se a chave atual é maior que o elemento da lista ordenada com que se está comparando. Se for maior, então o elemento na chave é inserido nessa posição. Caso contrário, segue-se a comparação. Este procedimento é correlato a uma busca linear pela posição de inserção da chave atual.\\
+
+Seguindo essa lógica, a lista desordenada vai diminuindo, e a lista ordenada vai crescendo, até que todo o vetor esteja ordenado, ou seja, ele é a própria lista ordenada, e a lista desordenada é vazia. O código para ele é o na \textbf{Figura \ref{insertion-code}}.
+
+\begin{figure}[H]
+\centering
+\includegraphics[width=0.75\textwidth]{images/code_insertion.png}
+\caption{Uma implementação em linguagem C do algoritmo de ordenação \textit{Insertion Sort} que ordena um vetor de inteiros em ordem crescente.}
+\label{insertion-code}
+\end{figure}
+
+Para o cálculo da função de eficiência do \textit{Insertion Sort}, também serão apenas consideradas as operações de comparação, salvo aquelas que estão nas linhas dos laços-\textit{for}.\\
+
+\begin{lstlisting}[language=C]
+void insertion_sort(array_t *array) {
+    int j;
+    for (j = 1; j < array->n_elements; j++) { /* (n - 1), [j de 1 a (n - 1)]*/
+        int key = array->values[j];
+        int i = j - 1;
+        
+				/* while-loop [i de (j - 1) a 0] */
+				// c para (array->values[i] > key) executada j vezes
+				// c para (i >= 0) executada (j + 1) vezes, pois tem a comparacao do falso
+		
+		
+				// Portanto: c.j + c.(j + 1) = c.(2j + 1)
+        while (i >= 0 && array->values[i] > key) { 
+            array->values[i + 1] = array->values[i];
+            i--;
+        }
+
+        array->values[i + 1] = key;
+    }
+}
+\end{lstlisting}
+
+Assim, seguem os cálculos:
+
+\begin{equation} \label{eq4}
+\begin{split}
+f(n) & = \sum_{j = 1}^{n - 1} c \cdot (2j + 1) \\
+	 & = c \cdot \sum_{j = 1}^{n - 1} (2j + 1) 
+\end{split}
+\end{equation}
+
+$$ \text{Para somatório P.A.: 1° termo é $3$, último é $(2n - 1)$ e número de termos é $(n - 1)$ }$$
+
+\begin{equation} \label{eq5}
+\begin{split}
+f(n) & = c \cdot \Bigg[ \frac{(n - 1) \cdot (3 + 2n - 1)}{2} \Bigg] \\
+	 & = c \cdot \Bigg[ \frac{(n - 1) \cdot (2n + 2)}{2} \Bigg] \\
+	 & = c \cdot (n - 1) \cdot (n + 1) \\
+	 & = c \cdot (n^2 - 1)
+\end{split}
+\end{equation}
+
+$$ \text{Considerando $c = 1$}$$
+
+\begin{equation} \label{eq6}
+\therefore \ f(n) = n^2 - 1
+\end{equation}
+
+A função de eficiência obtida indica que o método \textit{Insertion Sort}, para o pior caso, tem complexidade de tempo quadrática. Em notação assintótica, a qual não será aprofundada neste relatório, o algoritmo de ordenação por inserção pertence a $O(n^2)$.
+
+\subsubsection{Mergesort}
+\label{mer}
+
+O algoritmo de ordenação \textit{Mergesort}, também conhecido em português como `ordenação por intercalação', é um algoritmo que segue uma abordagem de `divisão e conquista', na qual divide-se o problema em subproblemas semelhantes ao original, porém de tamanho menor (divisão). Faz-se isso recursivamente, até que a solução do subproblema seja trivial (conquista). A volta da recursão é realizada de maneira a combinar as soluções dos problemas menores até que se resolva o problema original (combinação) \cite[p. 35]{cormen}.\\
+
+No caso do \textit{Mergesort}, divide-se o vetor original ao meio, então cada metade também ao meio e assim por diante, até que os subvetores tenham tamanho 1, que é o caso trivial para a ordenação, já que já estão ordenados. Na volta dessa recursão, é realizada a intercalação dos valores dos subvetores de forma ordenada, comparando dois a dois os menores valores de cada subvetor a ser intercalado. Nessas subetapas, os valores são armazenados num vetor auxiliar de forma ordenada e são então repassados para as devidas posições no vetor original. É importante observar esse uso de memória adicional quando se for comparar os algoritmos, mesmo que ele não influa tanto sobre a complexidade de tempo. Ao final, todo o vetor estará ordenado.\\
+
+O código utilizado para o \textit{Mergesort} é dividido em 2 funções: a função de intercalação ($merge$), que se encontra na \textbf{Figura \ref{merge-code}}, e a função recursiva que realiza o algoritmo como um todo ($mergesort$), cujo código está na \textbf{Figura \ref{mergesort-code}}.
+
+\begin{figure}[H]
+\centering
+\includegraphics[width=0.5\textwidth]{images/code_merge.png}
+\caption{Uma implementação em linguagem C da função de intercalação (para a ordem crescente), parte do algoritmo de \textit{Mergesort}.}
+\label{merge-code}
+\end{figure}
+
+\begin{figure}[H]
+\centering
+\includegraphics[width=0.7\textwidth]{images/code_mergesort.png}
+\caption{Uma implementação em linguagem C da função recursiva que executa o algoritmo de ordenação \textit{Mergesort}.}
+\label{mergesort-code}
+\end{figure}
+
+O cálculo da função de eficiência do algoritmo de ordenação por intercalação será dividido em duas etapas. Na primeira delas, será discutida a função de eficiância da função de intercalação ($merge$). Em seguida, resolver-se-á a recorrência para a determinação da função final de eficiência do algoritmo \textit{Mergesort} como um todo ($mergesort$). \\
+
+A função de intercalação ($merge$), ao receber $n$ elementos para intercalar, tem também esses mesmos $n$ elementos para comparar. Portanto, a função de eficiência deste procedimento será tida como:
+
+\begin{equation} \label{eq7}
+g(n) = n \cdot c
+\end{equation}
+
+Já para o procedimento $mergesort$, resolver-se-á a recorrência advinda da recursão. Também serão consideradas apenas as comparações.\\
+
+\begin{lstlisting}[language=C]
+void mergesort(array_t *array, int start, int end) {
+    if (start == end) { // c
+        return;
+    }
+
+    int c = (start + end) / 2;
+
+    mergesort(array, start, c); // f(n/2)
+    mergesort(array, c + 1, end); // f(n/2)
+
+    merge(array, start, end); // g(n) = n.c
+}
+\end{lstlisting}
+
+Segue-se, por recorrência, que:
+
+\begin{equation} \label{eq8}
+\begin{split}
+f(n) & = 2 \cdot f \Big( \frac{n}{2} \Big) + g(n) + c \\
+	 & = 2 \cdot f \Big( \frac{n}{2} \Big) + nc + c \\
+	 & = 2 \cdot f \Big( \frac{n}{2} \Big) + c \cdot (n + 1) 
+\end{split}
+\end{equation}
+
+$$ \text{Para a 2ª chamada:}$$
+
+\begin{equation} \label{eq9}
+\begin{split}
+f(n) & = 2 \cdot \Bigg[ 2 \cdot f \Big( \frac{n}{2^2} \Big) + c \cdot \Big( \frac{n}{2} + 1 \Big) \Bigg] + c \cdot (n + 1) \\
+	 & = 2^2 \cdot f \Big( \frac{n}{2^2} \Big) + c \cdot (n + 2^1) + c \cdot (n + 2^0)
+\end{split}
+\end{equation}
+
+$$ \text{Analogamente, para a 3ª chamada:}$$
+
+\begin{equation} \label{eq10}
+f(n) = 2^3 \cdot f \Big( \frac{n}{2^3} \Big) + c \cdot (n + 2^0) + c \cdot (n + 2^1) + c \cdot (n + 2^2)
+\end{equation}
+
+$$ \text{Logo, para a k-ésima chamada:}$$
+
+\begin{equation} \label{eq11}
+\begin{split}
+f(n) & = 2^k \cdot f \Big( \frac{n}{2^k} \Big) + c \cdot \sum_{i = 0}^{k - 1} (n + 2^i) \\
+	 & = 2^k \cdot f \Big( \frac{n}{2^k} \Big) + c \cdot \Bigg[ \sum_{i = 0}^{k - 1} n + \sum_{i = 0}^{k - 1} 2^i \Bigg] \\
+	 & = 2^k \cdot f \Big( \frac{n}{2^k} \Big) + c \cdot n \cdot k + c \cdot \sum_{i = 0}^{k - 1} 2^i
+\end{split}
+\end{equation}
+
+$$ \text{Para somatório P.G.: 1° termo é $1$, a razão é $2$ e número de termos é $k$}$$
+
+\begin{equation} \label{eq12}
+\begin{split}
+f(n) & = 2^k \cdot f \Big( \frac{n}{2^k} \Big) + c  \cdot n \cdot k + c \cdot \Bigg[ \frac{1 \cdot (2^k - 1)}{(2 - 1)} \Bigg] \\
+	 & = 2^k \cdot f \Big( \frac{n}{2^k} \Big) + c  \cdot n \cdot k + c \cdot (2^k - 1)
+\end{split}
+\end{equation}
+
+$$ \text{O caso base é $f(1) = c$. Assim, quer-se que $\frac{n}{2^k} = 1$}$$
+
+\begin{equation} \label{eq14}
+\frac{n}{2^k} = 1 \Rightarrow k = \log_2(n)
+\end{equation}
+
+$$ \text{Substituindo na fórmula generalizada:}$$
+
+\begin{equation} \label{eq15}
+\begin{split}
+f(n) & = n \cdot f(1) + c  \cdot n \cdot \log_2(n) + c \cdot (n - 1) \\
+	 & = n \cdot c + c  \cdot n \cdot \log_2(n) + c \cdot (n - 1) \\
+	 & = c \cdot \Big[ n + n \cdot \log_2(n) +(n - 1) \Big] \\
+	 & = c \cdot \Big[ n \cdot \log_2(n) + 2n - 1 \Big]
+\end{split}
+\end{equation}
+
+$$ \text{Considerando $c = 1$}$$
+
+\begin{equation} \label{eq16}
+\therefore \ f(n) = n \cdot \log_2(n) + 2n - 1
+\end{equation}
+
+A função de eficiência obtida indica que o método \textit{Mergesort}, para o pior caso, tem complexidade linearítmica. Em notação assintótica, a qual não será aprofundada neste relatório, o algoritmo de ordenação por intercalação pertence a $O(n \cdot \log_2(n))$.
+
+\subsection{Vetores de entrada}
+Os dados de entrada para as ordenações estavam organizados em vetores de números inteiros entre $-100000$ e $100000$ distintos em 3 condições iniciais de ordem diferentes:
+
+\begin{itemize}
+\item Vetor aleatório
+\item Vetor inversamente ordenado (decrescente)
+\item Vetor ordenado (crescente)
+\end{itemize}
+
+Os vetores foram gerados em código Python, escrevendo em arquivos-texto primeiramente o número de elementos e, em seguida, os elementos separados por espaço. Os tamanhos de vetor foram quinze: 25, 50, 100, 200, 400, 800, 1000, 1600, 3200, 6400, 12800, 25600, 51200, 80000 e 100000. Isso foi feito de forma que o código que gera os arquivos CSV lesse os dados da entrada padrão e os armazenasse de fato num vetor.
+
+\subsection{Medições dos tempos de execução}
+As medições dos tempos de execução dos algoritmos de ordenação foram feitas utilizando um código em linguagem C. Isso foi realizado com a biblioteca time.h, calculando a diferença entre as contagens de \textit{clock} antes e depois da execução de cada algoritmo e dividindo pela constante de \textit{clocks} por segundo, o que retorna o tempo de execução em segundos, com precisão de 6 casas decimais. Para cada combinação de algoritmo e vetor de entrada, foram efetuadas 10 medições, das quais será considerada cada média aritmética, além do erro como cada desvio-padrão.\\
+
+Os dados coletados foram escritos por um código C em arquivos CSV (\textit{Comma Separated Values}) contendo 3 campos:
+
+\begin{itemize}
+\item Tamanho: tamanho do vetor de entrada. Nomeadamente, o número de elementos no vetor que será ordenado.
+\item Iteração: valor de 1 a 10 que indica qual das 10 execuções para o mesmo vetor corresponde esta linha.
+\item Tempo: tempo de execução em segundos com 6 casas decimais de precisão.
+\end{itemize}
+
+Esses dados foram então colocados em gráficos com auxílio da biblioteca \textit{matplotlib} da linguagem Python. Eles foram dispostos de diferentes maneiras:
+
+\begin{itemize}
+\item Isoladamente para cada algoritmo com a entrada em cada determinado estado inicial de ordenação do vetor de entrada.
+\item Juntos para o mesmo algoritmo, mas em diferentes estados de ordenação do vetor de entrada.
+\item Juntos para o mesmo estado de ordenação do vetor de entrada, mas para diferentes algoritmos.
+\end{itemize}
+
+\section{Resultados}
+
+Os seguintes gráficos foram resultados das plotagens dos tempos médios de execução dos algoritmos de ordenação \textit{Bubble Sort}, \textit{Insertion Sort} e \textit{Mergesort}, segundo os critérios descritos acima, em função dos tamanhos dos vetores de entrada.
+
+\subsection{Resultados para o Bubble Sort}
+
+Esperava-se que o pior caso do \textit{Bubble Sort} fosse para vetores de entrada inversamente ordenados, seguido pelo caso para vetores aleatórios e, então, o melhor caso sendo para o vetores já ordenados. Os resultados individuais para o algoritmo de ordenação por bolha estão indicados nos gráficos das \textbf{Figuras \ref{s-bub-ran}, \ref{s-bub-des} e \ref{s-bub-asc}}.
+
+\begin{figure}[H]
+\centering
+\includegraphics[width=0.60\textwidth]{images/s_bubble_ran.png}
+\caption{Gráfico dos tempos de execução médios [s] do algoritmo \textit{Bubble Sort} para vetores de entrada aleatórios em função do tamanho da entrada.}
+\label{s-bub-ran}
+\end{figure}
+
+\begin{figure}[H]
+\centering
+\includegraphics[width=0.60\textwidth]{images/s_bubble_des.png}
+\caption{Gráfico dos tempos de execução médios [s] do algoritmo \textit{Bubble Sort} para vetores de entrada inversamente ordenados em função do tamanho da entrada.}
+\label{s-bub-des}
+\end{figure}
+
+\begin{figure}[H]
+\centering
+\includegraphics[width=0.60\textwidth]{images/s_bubble_asc.png}
+\caption{Gráfico dos tempos de execução médios [s] do algoritmo \textit{Bubble Sort} para vetores de entrada ordenados em função do tamanho da entrada.}
+\label{s-bub-asc}
+\end{figure}
+
+Os gráficos das \textbf{Figuras \ref{s-bub-ran} e \ref{s-bub-des}}, referentes às entradas de ordens aleatória e inversa, evidenciam a natureza quadrática da complexidade temporal do método de ordenação por bolha, assim como calculado na seção \ref{bub}. Isso se vê pelo formato parabólico da curva. Já o gráfico na \textbf{Figura \ref{s-bub-asc}}, mostra como o \textbf{Bubble Sort} é rápido no caso de a entrada já estar ordenada, uma vez que, para a maior entrada ($100000$ elementos), o tempo de execução foi menor do que $0,2$ milissegundos. Para esse melhor caso, pode-se provar que este algoritmo executa em tempo linear \cite{cormen}, já que o laço interno do código na \textbf{Figura \ref{bubble-code}} será efetuado apenas uma vez para todos os $n$ elementos e não terá havido nenhuma troca, ocasionando o fim da execução.
+
+\begin{figure}[H]
+\centering
+\includegraphics[width=0.60\textwidth]{images/intracomparative_bubble.png}
+\caption{Gráfico comparativo dos tempos de execução médios [s] do algoritmo \textit{Bubble Sort} para vetores de entrada aleatório, inversamente ordenados e ordenados em função do tamanho da entrada.}
+\label{intracomp-bub}
+\end{figure}
+
+O gráfico comparativo da \textbf{Figura \ref{intracomp-bub}} apresenta uma pequena quebra de expectativas: o algoritmo \textit{Bubble Sort} desempenhou pior para vetores aleatórios do que para vetores inversamente ordenados (a partir de um determinado tamanho). O caso da entrada em ordem reversa deveria ter sido o pior caso do método. Isso talvez se possa explicar por um fenômeno, relativo ao próprio funcionamento do processador da máquina utilizada para os testes, chamado \textit{Branch Prediction}, resultante de técnicas de \textit{Hardware} que buscam prever desvios condicionais para reduzir o tempo de execução \cite{ccc}. Se o vetor estiver inversamente ordenado, todas as comparações irão dar o mesmo resultado, o que fará o processador "intuir", a cada comparação consecutiva de mesmo retorno, que as próximas comparações resultarão também em tal valor. Já para entradas ordenadas, foi como esperado: comparativamente muito mais rápido do que para os outros casos. Tão mais rápido que quase não é visível sua curva no mesmo gráfico com os outros.
+
+\subsection{Resultados para o Insertion Sort}
+
+Assim como para o \textit{Bubble Sort}, esperava-se que o pior caso do \textit{Insertion Sort} fosse para vetores de entrada inversamente ordenados, seguido pelo caso para vetores aleatórios e, então, o melhor caso sendo para os vetores já ordenados. Os resultados individuais para o algoritmo de ordenação por inserção estão indicados nos gráficos das \textbf{Figuras \ref{s-ins-ran}, \ref{s-ins-des} e \ref{s-ins-asc}}.
+
+\begin{figure}[H]
+\centering
+\includegraphics[width=0.60\textwidth]{images/s_insertion_ran.png}
+\caption{Gráfico dos tempos de execução médios [s] do algoritmo \textit{Insertion Sort} para vetores de entrada aleatórios em função do tamanho da entrada.}
+\label{s-ins-ran}
+\end{figure}
+
+\begin{figure}[H]
+\centering
+\includegraphics[width=0.60\textwidth]{images/s_insertion_des.png}
+\caption{Gráfico dos tempos de execução médios [s] do algoritmo \textit{Insertion Sort} para vetores de entrada inversamente ordenados em função do tamanho da entrada.}
+\label{s-ins-des}
+\end{figure}
+
+\begin{figure}[H]
+\centering
+\includegraphics[width=0.60\textwidth]{images/s_insertion_asc.png}
+\caption{Gráfico dos tempos de execução médios [s] do algoritmo \textit{Insertion Sort} para vetores de entrada ordenados em função do tamanho da entrada.}
+\label{s-ins-asc}
+\end{figure}
+
+Os gráficos das \textbf{Figuras \ref{s-ins-ran} e \ref{s-ins-des}}, referentes às entradas de ordens aleatória e inversa, evidenciam a natureza quadrática da complexidade temporal do método de ordenação por inserção, assim como calculado na seção \ref{ins}. Isso se vê pelo formato parabólico da curva. Já o gráfico na \textbf{Figura \ref{s-ins-asc}}, mostra como o \textit{Insertion Sort} é rápido no caso de a entrada já estar ordenada, uma vez que, para a maior entrada ($100000$ elementos), o tempo de execução foi menor do que $0,4$ milissegundos. Pode-se provar que, para esse melhor caso do \textit{Insertion Sort}, ele desempenha em tempo linear \cite{cormen}.
+
+\begin{figure}[H]
+\centering
+\includegraphics[width=0.60\textwidth]{images/intracomparative_insertion.png}
+\caption{Gráfico comparativo dos tempos de execução médios [s] do algoritmo \textit{Insertion Sort} para vetores de entrada aleatório, inversamente ordenados e ordenados em função do tamanho da entrada.}
+\label{intracomp-ins}
+\end{figure}
+
+O gráfico comparativo da \textbf{Figura \ref{intracomp-ins}} mostra que, assim como esperado, o algoritmo \textit{Insertion Sort} desempenhou pior para vetores em ordem reversa do que para vetores em ordem aleatória. O melhor caso foi para entradas ordenadas, de forma tão rápida que quase não é visível a curva no mesmo gráfico com os outros casos. O resultado para entradas em ordem aleatória foi intermediário, para o método de ordenação por inserção.
+ 
+\subsection{Resultados para o Mergesort}
+
+Assim como para os algoritmos anteriormente analisados, esperava-se que o pior caso do \textit{Mergesort} fosse para vetores de entrada inversamente ordenados, seguido pelo caso para vetores aleatórios e, então, o melhor caso sendo para os vetores já ordenados. Os resultados individuais para o algoritmo de ordenação por intercalação estão indicados nos gráficos das \textbf{Figuras \ref{s-mer-ran}, \ref{s-mer-des} e \ref{s-mer-asc}}.
+
+\begin{figure}[H]
+\centering
+\includegraphics[width=0.60\textwidth]{images/s_merge_ran.png}
+\caption{Gráfico dos tempos de execução médios [s] do algoritmo \textit{Mergesort} para vetores de entrada aleatórios em função do tamanho da entrada.}
+\label{s-mer-ran}
+\end{figure}
+
+\begin{figure}[H]
+\centering
+\includegraphics[width=0.60\textwidth]{images/s_merge_des.png}
+\caption{Gráfico dos tempos de execução médios [s] do algoritmo \textit{Mergesort} para vetores de entrada inversamente ordenados em função do tamanho da entrada.}
+\label{s-mer-des}
+\end{figure}
+
+\begin{figure}[H]
+\centering
+\includegraphics[width=0.60\textwidth]{images/s_merge_asc.png}
+\caption{Gráfico dos tempos de execução médios [s] do algoritmo \textit{Mergesort} para vetores de entrada ordenados em função do tamanho da entrada.}
+\label{s-mer-asc}
+\end{figure}
+
+Mesmo que os gráficos das \textbf{Figuras \ref{s-mer-ran}, \ref{s-mer-des} e \ref{s-mer-asc}}, referentes às entradas de ordens aleatória, inversa e direta, não deixem tão claro visualmente o comportamento linearítmico do tempo de execução do algoritmo de ordenação por intercalação, como calculado na seção \ref{mer}, ainda podemos confiar que tais cálculos estejam corretos. A complexidade linearítmica é menor que a quadrática e maior que a linear. Assim, a curva obtida não é tão distinguível de uma curva reta, pelo menos para os dados coletados. 
+
+\begin{figure}[H]
+\centering
+\includegraphics[width=0.60\textwidth]{images/intracomparative_merge.png}
+\caption{Gráfico comparativo dos tempos de execução médios [s] do algoritmo \textit{Mergesort} para vetores de entrada aleatório, inversamente ordenados e ordenados em função do tamanho da entrada.}
+\label{intracomp-mer}
+\end{figure}
+
+O gráfico comparativo da \textbf{Figura \ref{intracomp-mer}} apresenta a mesma quebra de expectativas que houve com o \textit{Bubble Sort} (no gráfico da \textbf{Figura \ref{intracomp-bub}}): o algoritmo \textit{Insertion Sort} desempenhou pior para vetores aleatórios do que para vetores inversamente ordenados (a partir de um determinado tamanho). O caso da entrada em ordem reversa deveria ter sido o pior caso do método. Isso talvez também se possa explicar pelo fenômeno de \textit{Branch Prediction} \cite{ccc}. Para as entradas direta e as inversamente ordenadas, o método de ordenação por intercalação obteve \textit{performance} semelhante.\\
+
+Nota-se que, diferente dos gráficos comparativos vistos para os outros métodos de ordenação (\textbf{Figuras \ref{intracomp-bub} e \ref{intracomp-ins}}), a escala das três curvas plotadas justas está consideravelmente reduzida. Para o \textit{Mergesort}, o pior caso com o maior vetor de entrada executou em menos de $20$ milisegundos.
+
+\subsection{Resultados Comparativos entre os Algoritmos de Ordenação}
+
+Seguem, nas \textbf{Figuras \ref{comp-ran}, \ref{comp-des} e \ref{comp-asc}}, os resultados comparativos entre os três algoritmos de ordenação analisados (\textit{Bubble Sort}, \textit{Insertion Sort} e \textit{Mergesort}), agrupados conforme a condição inicial de ordenação dos vetores de entrada, respectivamente em ordens: aleatória, inversa e direta.
+
+\begin{figure}[H]
+\centering
+\includegraphics[width=0.60\textwidth]{images/comparative_ran.png}
+\caption{Gráfico comparativo dos tempos de execução médios [s] dos algoritmos \textit{Bubble Sort}, \textit{Insertion Sort} e \textit{Mergesort} para vetores de entrada aleatórios em função do tamanho da entrada.}
+\label{comp-ran}
+\end{figure}
+
+Para vetores de entrada aleatórios (\textbf{Figura \ref{comp-ran}}), o algoritmo que melhor desempenhou foi o \textit{Mergesort}. Aquele que obteve o pior desempenho foi o \textit{Bubble Sort}, seguido pelo \textit{Insertion Sort}.
+
+\begin{figure}[H]
+\centering
+\includegraphics[width=0.60\textwidth]{images/comparative_des.png}
+\caption{Gráfico comparativo dos tempos de execução médios [s] dos algoritmos \textit{Bubble Sort}, \textit{Insertion Sort} e \textit{Mergesort} para vetores de entrada inversamente ordenados em função do tamanho da entrada.}
+\label{comp-des}
+\end{figure}
+
+O resultado para vetores de entrada inversamente ordenados (\textbf{Figura \ref{comp-des}}) foi semelhante ao do para vetores aleatórios. O algoritmo que melhor desempenhou foi o \textit{Mergesort}, seguido pelo \textit{Insertion Sort} e então pelo \textit{Bubble Sort}, o qual foi o mais ineficiente nesse cenário.
+
+
+\begin{figure}[H]
+\centering
+\includegraphics[width=0.60\textwidth]{images/comparative_asc.png}
+\caption{Gráfico comparativo dos tempos de execução médios [s] dos algoritmos \textit{Bubble Sort}, \textit{Insertion Sort} e \textit{Mergesort} para vetores de entrada ordenados em função do tamanho da entrada.}
+\label{comp-asc}
+\end{figure}
+
+
+Para vetores inversamente ordenados, todos os algoritmos executaram em um tempo consideravelmente rápido. O método de ordenação por intercalação, porém, obteve o pior desempenho dos três. Isso talvez se deva ao fato de ele utilizar memória auxiliar. A somatória de todos os processos de alocação, desalocação e atribuições deve ter contribuído para essa \textit{performance} relativamente pior.
+
+    
+\section{Conclusão}
+
+
+\bibliographystyle{plain}
+\bibliography{modelo}
+
+
+\end{document}
